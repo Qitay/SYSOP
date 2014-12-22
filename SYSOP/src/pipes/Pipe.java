@@ -1,8 +1,10 @@
 package pipes;
 
 public class Pipe {
-	//dupa
-	public void pipe(int y)
-	{};
+	
+	public int pipe(int fd)
+	{
+		return 0;
+	};
 	
 }
