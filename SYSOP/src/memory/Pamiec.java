@@ -116,7 +116,7 @@ public class Pamiec
 		return plik_zew.odczyt( k );
 	}
 	
-	public static void main(String[] args)
+	/*public static void main(String[] args)
 	{
 		Pamiec a = new Pamiec();
 			
@@ -219,5 +219,5 @@ public class Pamiec
 		System.out.println();
 		
 		a.plik_zew.wyswietl();
-	}
+	}*/
 }
