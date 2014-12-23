@@ -2,7 +2,7 @@ package memory;
 
 public class Pamiec
 {
-	private byte[] pamiec_op; 	//TABLICA PAMIÊCI OPERACYJNEJ
+	public static byte[] pamiec_op; 	//TABLICA PAMIÊCI OPERACYJNEJ
 	boolean [] wektor_zajetosci;
 	int rozmiar_ramki = 16, liczba_ramek;
 		
