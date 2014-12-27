@@ -47,7 +47,7 @@ public class Pamiec
 
 	void zapis(String kp)
 	{	
-		liczba_stron = ( kp.length()/17 + 1 );
+		liczba_stron = ( (kp.length()-1)/16 + 1 );
 		indx = 0;								
 							//szukanie pustego indeksu w którym zapiszemy tablice stron
 		for( i = 0 ; i < liczba_ramek ; i++ )
@@ -151,7 +151,7 @@ public class Pamiec
 				for( i = 0 ; i < rozmiar_ramki ; i++ )
 				{
 					if(i < bufor.length) pamiec_op[ rozmiar_ramki * ofiara + i ] = bufor[ i ];
-					else if( i >= bufor.length && pamiec_op[ rozmiar_ramki * ofiara + i ] == 0 ) break;
+					else if( pamiec_op[ rozmiar_ramki * ofiara + i ] == 0 ) break;
 					else if( i >= bufor.length && pamiec_op[ rozmiar_ramki * ofiara + i ] != 0 ) pamiec_op[ rozmiar_ramki * ofiara + i ] = 0;
 				}
 				for( i = 0 ; i < liczba_ramek ; i++ )
@@ -224,6 +224,10 @@ public class Pamiec
 			reading.nextLine();
 			switch( opcja )
 			{
+				case 0:
+				{
+					poprawnosc = false;
+				}
 				case 1:
 				{
 					System.out.println("Podaj dane do zapisu: ");
@@ -271,7 +275,7 @@ public class Pamiec
 				}
 				default:
 				{
-					poprawnosc = false;
+					System.out.println("Nieprawidlowy numer!!");
 				}
 			}
 		}

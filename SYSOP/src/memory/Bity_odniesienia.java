@@ -19,16 +19,16 @@ public class Bity_odniesienia
 	
 	boolean[] sprawdz_wektor( boolean[] a )
 	{
-		if(dl<7)
+		if(dl<9)
 		{
 			dl++;
 		}
 		wyzerowana = a;
 		for( i = 0; i < 16 ; i++ )
 		{	
-			if( dl == 7)
+			if( dl == 9)
 			{
-				dodatkowe_odniesienia [ i ] = dodatkowe_odniesienia [ i ].substring(0,5);
+				dodatkowe_odniesienia [ i ] = dodatkowe_odniesienia [ i ].substring(0,7);
 			}
 			
 			if( a[ i ] == false )
