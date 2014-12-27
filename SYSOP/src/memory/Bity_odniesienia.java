@@ -9,7 +9,7 @@ public class Bity_odniesienia
 	String[] dodatkowe_odniesienia;
 	int dl, i, ofiara, min;
 	String bit;
-	boolean[] wyzerowana;
+	boolean[] wyzerowana; 
 	
 	protected Bity_odniesienia()
 	{

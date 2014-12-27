@@ -191,7 +191,7 @@ public class Plik_wymiany
 			{
 				e.printStackTrace();
 			}
-		}
+		} 
 		try {
 			zapis.close();
 		} 
