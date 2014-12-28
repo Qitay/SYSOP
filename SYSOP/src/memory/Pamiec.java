@@ -1,4 +1,5 @@
 package memory;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 
@@ -14,6 +15,7 @@ public class Pamiec
 	int numer_tablicy;
 	byte[] bufor;
 	
+	byte tmp2;
 	int liczba_stron;		//liczba stron danego procesu
 	boolean znalezienie_ramki, znalezienie_ofiary;
 	
@@ -45,10 +47,9 @@ public class Pamiec
 		}
 	}		//konstruktor pamiêci
 
-	void zapis(String kp)
+	int zapis(String kp)
 	{	
 		liczba_stron = ( (kp.length()-1)/16 + 1 );
-		indx = 0;								
 							//szukanie pustego indeksu w którym zapiszemy tablice stron
 		for( i = 0 ; i < liczba_ramek ; i++ )
 		{
@@ -58,7 +59,7 @@ public class Pamiec
 				break;
 			}
 		}
-						
+		indx = 0;	
 		for( j = 0; j < liczba_stron ; j++ )
 		{
 			bufor = new byte[ 16 ];			//odœwie¿enie bufora
@@ -79,7 +80,7 @@ public class Pamiec
 				nr_ramki2 = znajdz_ramke();
 				if( nr_ramki2 == -1 )
 				{
-					System.out.println("ERROR. BRAK MIEJSCA.");
+					//stronicowanie
 				}
 				else if( nr_ramki2 > -1 )
 				{
@@ -89,6 +90,7 @@ public class Pamiec
 			plik_zew.zapis_plik( bufor , i , indx );
 			indx++;
 		}
+		return i;
 	}
 	
 	int przeliczanie_adresu( int indeks, int adrs_log)
@@ -126,7 +128,7 @@ public class Pamiec
 	
 	void zapis_do_ramki( byte[] tab , int indeks , int nr_strony , int nr)
 	{
-		for( l = 0 ; l < bufor.length ; l++ )
+		for( l = 0 ; l < tab.length ; l++ )
 		{
 			pamiec_op[ rozmiar_ramki * nr + l ] = tab[ l ];
 		}
@@ -138,73 +140,82 @@ public class Pamiec
 	byte odczyt( int indeks, int adrs_log )
 	{
 		indeks_strony = adrs_log/rozmiar_ramki;
-		if( tablica_proc[ indeks ].waznosc[ indeks_strony ] == false)
+		try
 		{
-			System.out.println("Blad strony!!!");
-			sprowadzana_strona = plik_zew.sprowadzenie_strony(indeks, indeks_strony);
-			bufor = sprowadzana_strona.getBytes();
-			nr_ramki2 = znajdz_ramke();
-			if( nr_ramki2 == -1)
+			if( tablica_proc[ indeks ].waznosc[ indeks_strony ] == false)
 			{
-				ofiara = bb.znajdz_ofiare();
-				for( i = 0 ; i < rozmiar_ramki ; i++ )
+				System.out.println("Blad strony!!!");
+				sprowadzana_strona = plik_zew.sprowadzenie_strony(indeks, indeks_strony);
+				bufor = sprowadzana_strona.getBytes();
+				nr_ramki2 = znajdz_ramke();
+				if( nr_ramki2 == -1)
 				{
-					pamiec_op[ rozmiar_ramki * ofiara + i ] = 0;
-				}
-				for( i = 0 ; i < bufor.length ; i++ )
-				{
-					pamiec_op[ rozmiar_ramki * ofiara + i ] = bufor[ i ];
-				}
-				znalezienie_ofiary = false;
-				for( i = 0 ; i < liczba_ramek ; i++ )
-				{
-					if( tablica_proc[ i ] != null )
+					ofiara = bb.znajdz_ofiare();
+					for( i = 0 ; i < rozmiar_ramki ; i++ )
 					{
-						for( j = 0 ; j < tablica_proc[ i ].wielkosc ; j++ )
+						pamiec_op[ rozmiar_ramki * ofiara + i ] = 0;
+					}
+					zapis_do_ramki( bufor , indeks , indeks_strony , ofiara );
+					znalezienie_ofiary = false;
+					for( i = 0 ; i < liczba_ramek ; i++ )
+					{
+						if( tablica_proc[ i ] != null )
 						{
-							if( tablica_proc[ i ].tablica_stron[ j ] == ofiara )
+							for( j = 0 ; j < tablica_proc[ i ].wielkosc ; j++ )
 							{
-								tablica_proc[ i ].tablica_stron[ j ] = -1;
-								tablica_proc[ i ].waznosc[ j ] = false;
-								plik_zew.nadpisz_strone( bufor, i , j );
-								znalezienie_ofiary = true;
-								break;
+								if( tablica_proc[ i ].tablica_stron[ j ] == ofiara )
+								{
+									tablica_proc[ i ].tablica_stron[ j ] = -1;
+									tablica_proc[ i ].waznosc[ j ] = false;
+									plik_zew.nadpisz_strone( bufor, i , j );
+									znalezienie_ofiary = true;
+									break;
+								}
 							}
 						}
+						if( znalezienie_ofiary==true) break;
 					}
-					if( znalezienie_ofiary==true) break;
 				}
-				wektor_zajetosci [ ofiara ] = false;
-				tablica_proc[ indeks ].tablica_stron[ indeks_strony ] = ofiara;
-				tablica_proc[ indeks ].waznosc[ indeks_strony ] = true; 		//ustawienie bitu waznosci na valid
+				else if( nr_ramki >= 0)
+				{
+					zapis_do_ramki( bufor , indeks , indeks_strony , nr_ramki2 );
+				}
+				tablica_proc[ indeks ].waznosc[ indeks_strony ] = true;
 			}
-			else if( nr_ramki >= 0)
-			{
-				zapis_do_ramki( bufor , indeks , indeks_strony , nr_ramki2 );
-			}
-			tablica_proc[ indeks ].waznosc[ indeks_strony ] = true;
+			ramka = przeliczanie_adresu( indeks, adrs_log );
+			bit_odniesienia [ ramka/16 ] = true;
+			bit_odniesienia = bb.sprawdz_wektor( bit_odniesienia );
+			return pamiec_op[ ramka ];
 		}
-		ramka = przeliczanie_adresu( indeks, adrs_log );
-		bit_odniesienia [ ramka/16 ] = true;
-		bit_odniesienia = bb.sprawdz_wektor( bit_odniesienia );
-		return pamiec_op[ ramka ];
+		catch( Exception e )
+		{
+			return -1;
+		}
 	}
 
-	void usun_proces( int indeks )
+	byte usun_proces( int indeks )
 	{
-		for( i = 0 ; i < tablica_proc[ indeks ].wielkosc ; i++ )
+		try
 		{
-			if( tablica_proc[ indeks ].waznosc[ i ] == true)
+			for( i = 0 ; i < tablica_proc[ indeks ].wielkosc ; i++ )
 			{
-				for( j = 0 ; j < rozmiar_ramki ; j++ )
+				if( tablica_proc[ indeks ].waznosc[ i ] == true)
 				{
-					pamiec_op[ tablica_proc[ indeks ].tablica_stron[ i ]*16 + j ] = 0;
+					for( j = 0 ; j < rozmiar_ramki ; j++ )
+					{
+						pamiec_op[ tablica_proc[ indeks ].tablica_stron[ i ]*16 + j ] = 0;
+					}
+					wektor_zajetosci [ tablica_proc[ indeks ].tablica_stron[ i ] ] = true;
 				}
-				wektor_zajetosci [ tablica_proc[ indeks ].tablica_stron[ i ] ] = true;
+				plik_zew.usun_strone( indeks, i );
 			}
-			plik_zew.usun_strone( indeks, i );
+			tablica_proc[ indeks ] = null;
+			return 0;
 		}
-		tablica_proc[ indeks ] = null;
+		catch( Exception e)
+		{
+			return -1;
+		}	
 	}
 	
 	public static void main(String[] args)
@@ -214,8 +225,8 @@ public class Pamiec
 		int opcja, indeks_procesu, adres;
 		String napis;
 		int w;
+		byte kupa;
 		boolean poprawnosc = true;
-		
 		System.out.println("Pamiec operacyjna");
 		System.out.println("1. Zapis");
 		System.out.println("2. Odczyt");
@@ -223,16 +234,13 @@ public class Pamiec
 		System.out.println("4. Wyswietl pamiec");
 		System.out.println("5. Wyswietl zawartosc tablicy stron procesu");
 		System.out.println("6. Wyswietl wektor zajetosci");
-		System.out.println("0. Wyjscie");
-		while ( poprawnosc == true ){
+		System.out.println("7. Wyjscie");
+		while( poprawnosc == true ){
+			
 			opcja = reading.nextInt();
 			reading.nextLine();
 			switch( opcja )
 			{
-				case 0:
-				{
-					poprawnosc = false;
-				}
 				case 1:
 				{
 					System.out.println("Podaj dane do zapisu: ");
@@ -247,14 +255,19 @@ public class Pamiec
 					indeks_procesu = reading.nextInt();
 					System.out.println("Podaj adres: ");
 					adres = reading.nextInt();
-					System.out.println(a.odczyt(indeks_procesu, adres));
+					kupa = a.odczyt( indeks_procesu, adres );
+					if( kupa == -1 ) System.out.println("Podano zly indeks lub adres!!");
+					else System.out.println( kupa );
 					break;
 				}
 				case 3:
 				{
 					System.out.println("Podaj indeks procesu do usuniecia: ");
 					indeks_procesu = reading.nextInt();
-					a.usun_proces(indeks_procesu);
+					kupa = a.usun_proces(indeks_procesu);
+					if( kupa == -1) System.out.println("Podano zly indeks!!");
+					else System.out.println("Usunieto proces");
+					break;
 				}
 				case 4:
 				{
@@ -273,11 +286,17 @@ public class Pamiec
 				{
 					System.out.println("Podaj numer procesu: ");
 					indeks_procesu = reading.nextInt();
-					for( w = 0 ; w < a.tablica_proc[ indeks_procesu ].wielkosc ; w++ )
-					{
-						System.out.print( a.tablica_proc[ indeks_procesu ].tablica_stron[ w ] + " ");
+					try{
+						for( w = 0 ; w < a.tablica_proc[ indeks_procesu ].wielkosc ; w++ )
+						{
+							System.out.print( a.tablica_proc[ indeks_procesu ].tablica_stron[ w ] + " ");
+						}
+						System.out.println();
 					}
-					System.out.println();
+					catch( Exception e )
+					{
+						System.out.println("Podano nieprawidlowy numer procesu");
+					}
 					break;
 				}
 				case 6:
@@ -287,10 +306,17 @@ public class Pamiec
 						System.out.print(a.wektor_zajetosci[ w ] + " ");
 					}
 					System.out.println();
+					break;
+				}
+				case 7:
+				{
+					poprawnosc = false;
+					break;
 				}
 				default:
 				{
 					System.out.println("Nieprawidlowy numer!!");
+					break;
 				}
 			}
 		}
