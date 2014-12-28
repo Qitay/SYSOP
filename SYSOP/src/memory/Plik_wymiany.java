@@ -12,7 +12,7 @@ import java.util.List;
 
 public class Plik_wymiany
 {
-	String tmp, tmp2;		//Obiekt pomocniczy
+	String tmp, tmp2, tmp3;		//Obiekty pomocnicze
 	String[] linie_pliku;
 	
 	int i, j, potrzebna_linia;
@@ -194,6 +194,85 @@ public class Plik_wymiany
 		} 
 		try {
 			zapis.close();
+			odczyt.close();
+			odczytywanie.close();
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	void nadpisz_strone( byte[] bufor , int indeks , int nr_strony )
+	{
+		try
+		{
+			odczyt = new FileReader ( plik );
+		} 
+		catch (FileNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		c = new int[ 2 ];
+		b = new int[ 2 ];
+		b[ 0 ] = indeks;
+		b[ 1 ] = nr_strony;
+		odczytywanie = new BufferedReader( odczyt );
+		linie_pliku = new String[lista.size()];
+		tmp3 = konwersja( bufor );
+		
+		for( i = 0 ; i < lista.size() ; i++ )
+		{			
+			try 
+			{
+				linie_pliku [ i ] = odczytywanie.readLine();
+			} 
+			catch (IOException e) 
+			{
+				e.printStackTrace();
+			}
+			c = lista.get(i);
+			if( c[0] == b[0] && c[1] == b[1] )
+			{	
+				linie_pliku [ i ] = tmp3;
+			}
+		}
+		
+		try
+		{
+			zapis = new FileWriter ( plik );
+		} 
+		catch (IOException e1)
+		{
+			e1.printStackTrace();
+		}
+	
+		plik.delete();
+		
+		try
+		{
+			zapis = new FileWriter ( plik , true );
+		} 
+		catch (IOException e1)
+		{
+			e1.printStackTrace();
+		}
+		
+		for( i = 0 ; i < lista.size() ; i++ )
+		{
+			try 
+			{
+				zapis.write( linie_pliku [ i ] + "\r\n" );
+			} 
+			catch (IOException e) 
+			{
+				e.printStackTrace();
+			}
+		} 
+		try {
+			zapis.close();
+			odczyt.close();
+			odczytywanie.close();
 		} 
 		catch (IOException e) 
 		{
@@ -208,5 +287,4 @@ public class Plik_wymiany
 			System.out.print(lista.get(i)+" ");
 		}
 	}
-
 }

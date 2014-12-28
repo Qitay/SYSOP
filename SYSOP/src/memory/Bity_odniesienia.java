@@ -1,9 +1,5 @@
 package memory;
 
-import java.util.Random;
-import java.util.Scanner;
-
-
 public class Bity_odniesienia
 {
 	String[] dodatkowe_odniesienia;
@@ -61,10 +57,5 @@ public class Bity_odniesienia
 			}
 		}
 		return ofiara;
-	}
-
-	public static void main(String[] args)
-	{
-		
 	}
 }

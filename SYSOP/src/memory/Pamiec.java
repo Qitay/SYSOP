@@ -61,6 +61,7 @@ public class Pamiec
 						
 		for( j = 0; j < liczba_stron ; j++ )
 		{
+			bufor = new byte[ 16 ];			//odœwie¿enie bufora
 			if( kp.length() > 16 )				//wyodrêbnienie strony z napisu - POCZ¥TEK
 			{
 				temporary = kp.substring(0, 16);
@@ -87,7 +88,6 @@ public class Pamiec
 			}
 			plik_zew.zapis_plik( bufor , i , indx );
 			indx++;
-			bufor = new byte[ 16 ];			//odœwie¿enie bufora
 		}
 	}
 	
@@ -142,7 +142,6 @@ public class Pamiec
 		{
 			System.out.println("Blad strony!!!");
 			sprowadzana_strona = plik_zew.sprowadzenie_strony(indeks, indeks_strony);
-			
 			bufor = sprowadzana_strona.getBytes();
 			nr_ramki2 = znajdz_ramke();
 			if( nr_ramki2 == -1)
@@ -167,6 +166,7 @@ public class Pamiec
 							{
 								tablica_proc[ i ].tablica_stron[ j ] = -1;
 								tablica_proc[ i ].waznosc[ j ] = false;
+								plik_zew.nadpisz_strone( bufor, i , j );
 								znalezienie_ofiary = true;
 								break;
 							}
@@ -188,7 +188,7 @@ public class Pamiec
 		bit_odniesienia [ ramka/16 ] = true;
 		bit_odniesienia = bb.sprawdz_wektor( bit_odniesienia );
 		return pamiec_op[ ramka ];
-	}	
+	}
 
 	void usun_proces( int indeks )
 	{
@@ -294,6 +294,7 @@ public class Pamiec
 				}
 			}
 		}
+		reading.close();
 	}
 }
 
