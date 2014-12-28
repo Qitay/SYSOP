@@ -15,20 +15,24 @@ public class Bity_odniesienia
 	{
 		dodatkowe_odniesienia = new String [ 16 ];
 		dl = 1;
+		for( i = 0 ; i < 16 ; i++ )
+		{
+			dodatkowe_odniesienia[ i ] = "0";
+		}
 	}
 	
 	boolean[] sprawdz_wektor( boolean[] a )
 	{
-		if(dl<9)
+		if(dl<7)
 		{
 			dl++;
 		}
 		wyzerowana = a;
 		for( i = 0; i < 16 ; i++ )
 		{	
-			if( dl == 9)
+			if( dl == 7)
 			{
-				dodatkowe_odniesienia [ i ] = dodatkowe_odniesienia [ i ].substring(0,7);
+				dodatkowe_odniesienia [ i ] = dodatkowe_odniesienia [ i ].substring(0,5);
 			}
 			
 			if( a[ i ] == false )

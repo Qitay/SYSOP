@@ -15,7 +15,7 @@ public class Pamiec
 	byte[] bufor;
 	
 	int liczba_stron;		//liczba stron danego procesu
-	boolean znalezienie_ramki;
+	boolean znalezienie_ramki, znalezienie_ofiary;
 	
 	int i, j, k, l, ramka;		//zmienne pomocnicze
 	String temporary, sprowadzana_strona;
@@ -68,7 +68,7 @@ public class Pamiec
 			}
 			else
 			{
-				temporary = kp.substring(0);
+				temporary = kp;
 			}									//wyodrêbnienie strony z napisu - KONIEC
 			
 			bufor = temporary.getBytes();		//zamiana strony na bajty
@@ -117,7 +117,7 @@ public class Pamiec
 		{
 			nr_ramki2 = k;
 		}
-		else if( znalezienie_ramki )
+		else if( znalezienie_ramki == false )
 		{
 			nr_ramki2 = -1;
 		}
@@ -150,10 +150,13 @@ public class Pamiec
 				ofiara = bb.znajdz_ofiare();
 				for( i = 0 ; i < rozmiar_ramki ; i++ )
 				{
-					if(i < bufor.length) pamiec_op[ rozmiar_ramki * ofiara + i ] = bufor[ i ];
-					else if( pamiec_op[ rozmiar_ramki * ofiara + i ] == 0 ) break;
-					else if( i >= bufor.length && pamiec_op[ rozmiar_ramki * ofiara + i ] != 0 ) pamiec_op[ rozmiar_ramki * ofiara + i ] = 0;
+					pamiec_op[ rozmiar_ramki * ofiara + i ] = 0;
 				}
+				for( i = 0 ; i < bufor.length ; i++ )
+				{
+					pamiec_op[ rozmiar_ramki * ofiara + i ] = bufor[ i ];
+				}
+				znalezienie_ofiary = false;
 				for( i = 0 ; i < liczba_ramek ; i++ )
 				{
 					if( tablica_proc[ i ] != null )
@@ -164,11 +167,12 @@ public class Pamiec
 							{
 								tablica_proc[ i ].tablica_stron[ j ] = -1;
 								tablica_proc[ i ].waznosc[ j ] = false;
+								znalezienie_ofiary = true;
 								break;
 							}
 						}
 					}
-					if( tablica_proc[ i ].tablica_stron[ j ] == ofiara ) break;
+					if( znalezienie_ofiary==true) break;
 				}
 				wektor_zajetosci [ ofiara ] = false;
 				tablica_proc[ indeks ].tablica_stron[ indeks_strony ] = ofiara;
@@ -218,6 +222,7 @@ public class Pamiec
 		System.out.println("3. Usun proces");
 		System.out.println("4. Wyswietl pamiec");
 		System.out.println("5. Wyswietl zawartosc tablicy stron procesu");
+		System.out.println("6. Wyswietl wektor zajetosci");
 		System.out.println("0. Wyjscie");
 		while ( poprawnosc == true ){
 			opcja = reading.nextInt();
@@ -261,6 +266,7 @@ public class Pamiec
 						}
 						System.out.print( a.pamiec_op[ w ] + " " );
 					}
+					System.out.println();
 					break;
 				}
 				case 5:
@@ -269,9 +275,18 @@ public class Pamiec
 					indeks_procesu = reading.nextInt();
 					for( w = 0 ; w < a.tablica_proc[ indeks_procesu ].wielkosc ; w++ )
 					{
-						System.out.println( a.tablica_proc[ indeks_procesu ].tablica_stron[ w ] + " ");
+						System.out.print( a.tablica_proc[ indeks_procesu ].tablica_stron[ w ] + " ");
 					}
+					System.out.println();
 					break;
+				}
+				case 6:
+				{
+					for( w = 0 ; w < 16 ; w++ )
+					{
+						System.out.print(a.wektor_zajetosci[ w ] + " ");
+					}
+					System.out.println();
 				}
 				default:
 				{
