@@ -1,5 +1,5 @@
 package processmanagement;
 
 public class Global {
-	public static int mpid=0;
+	public static int mpid=1;
 }

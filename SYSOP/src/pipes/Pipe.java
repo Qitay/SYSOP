@@ -1,5 +1,7 @@
 package pipes;
 
+import processmanagement.*;
+
 public class Pipe {
 	
 	public int pipe(int fd[])
