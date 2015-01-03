@@ -15,7 +15,8 @@ public class Pipe_Inode {
          /*int rd_openers;     ilosc czytelnikow, ktorzy otworzyli
                                lacze (tylko dla lacza nazwanego) */ 
          /*int wr_openers;     ilosc pisarzy, ktorzy otworzyli
-                                      lacze (tylko dla lacza nazwanego) */
+                               lacze (tylko dla lacza nazwanego) */
+         
          int readers;       /* ilosc czytelnikow */
          int writers;       /* ilosc pisarzy */
 

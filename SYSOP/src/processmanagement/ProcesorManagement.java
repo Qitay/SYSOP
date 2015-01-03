@@ -1,4 +1,4 @@
-package cpumanagement;
+package processmanagement;
 
 public class ProcesorManagement {
 

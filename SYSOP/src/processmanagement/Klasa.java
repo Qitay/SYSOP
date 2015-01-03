@@ -1,4 +1,4 @@
-package cpumanagement;
+package processmanagement;
 import java.util.ArrayList;
 public class Klasa {
 
