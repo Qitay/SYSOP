@@ -114,7 +114,7 @@ public class Pliki
 		ArrayList<Iwezel> wezly= new ArrayList<Iwezel>();
 		Blok[] dysktwardy=new Blok[32];	
 		for(int i=0;i<32;i++)dysktwardy[i]=new Blok();
-
+		System.out.println("TESTESTEST");
 		
 		while(x!=6){
 			System.out.println("1-stworz plik");
