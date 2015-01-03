@@ -1,11 +1,9 @@
 package memory;
-import java.util.InputMismatchException;
 import java.util.Scanner;
-
 
 public class Pamiec
 {
-	private byte[] pamiec_op; 	//TABLICA PAMIÊCI OPERACYJNEJ
+	byte[] pamiec_op; 	//TABLICA PAMIÊCI OPERACYJNEJ
 	boolean [] wektor_zajetosci, bit_odniesienia;
 	int rozmiar_ramki = 16, liczba_ramek;
 		
@@ -47,7 +45,7 @@ public class Pamiec
 		}
 	}		//konstruktor pamiêci
 
-	int zapis(String kp)
+	public int ZAPIS( String kp )		//JAKO ARGUMENT STRING KTORY CHCESZ ZAPISAC
 	{	
 		liczba_stron = ( (kp.length()-1)/16 + 1 );
 							//szukanie pustego indeksu w którym zapiszemy tablice stron
@@ -93,51 +91,7 @@ public class Pamiec
 		return i;
 	}
 	
-	int przeliczanie_adresu( int indeks, int adrs_log)
-	{
-		indeks_strony = adrs_log/rozmiar_ramki;
-		nr_ramki = tablica_proc[ indeks ].tablica_stron[ indeks_strony ];
-		offset = adrs_log % rozmiar_ramki;
-		adres_FIZYCZNY = (nr_ramki * rozmiar_ramki) + offset;
-		return adres_FIZYCZNY;
-	}
-	
-	int znajdz_ramke()
-	{
-		znalezienie_ramki = false;
-		for( k = 0 ; k < liczba_ramek ; k++ )
-		{
-			if( wektor_zajetosci[ k ] == true )
-			{
-				znalezienie_ramki = true;
-				wektor_zajetosci [ k ] = false;
-				break;
-			}
-		}
-		
-		if( znalezienie_ramki == true )
-		{
-			nr_ramki2 = k;
-		}
-		else if( znalezienie_ramki == false )
-		{
-			nr_ramki2 = -1;
-		}
-		return nr_ramki2;
-	}
-	
-	void zapis_do_ramki( byte[] tab , int indeks , int nr_strony , int nr)
-	{
-		for( l = 0 ; l < tab.length ; l++ )
-		{
-			pamiec_op[ rozmiar_ramki * nr + l ] = tab[ l ];
-		}
-		wektor_zajetosci [ nr ] = false;
-		tablica_proc[ indeks ].tablica_stron[ nr_strony ] = nr;
-		tablica_proc[ indeks ].waznosc[ nr_strony ] = true; 		//ustawienie bitu waznosci na valid
-	}
-
-	byte odczyt( int indeks, int adrs_log )
+	public byte ODCZYT( int indeks, int adrs_log )		//JAKO ARGUMENTY NUMER PROCESU ORAZ ADRES POTRZEBNEGO BAJTU
 	{
 		indeks_strony = adrs_log/rozmiar_ramki;
 		try
@@ -192,8 +146,26 @@ public class Pamiec
 			return -1;
 		}
 	}
-
-	byte usun_proces( int indeks )
+	
+	public int KLONUJ( int stary ) 	//JAKO ARGUMENT NUMER PROCESU DO SKLONOWANIA
+	{
+		temporary = "";
+		for( i = 0 ; i < tablica_proc[ stary ].wielkosc; i++ )
+		{
+			temporary = temporary + plik_zew.sprowadzenie_strony(stary, i);
+		}
+		i = ZAPIS( temporary );
+		return i;
+	}
+	
+	public int NADPISZ( String kp , int proces )	//JAKO ARGUMENTY: NOWY KOD ORAZ NUMER PROCESU DO NADPISANIA
+	{
+		USUN( proces );
+		i = ZAPIS( kp );
+		return i;
+	}
+	
+	public byte USUN( int indeks )		//JAKO ARGUMENT NUMER PROCESU DO USUNIECIA
 	{
 		try
 		{
@@ -218,6 +190,50 @@ public class Pamiec
 		}	
 	}
 	
+	int przeliczanie_adresu( int indeks, int adrs_log)
+	{
+		indeks_strony = adrs_log/rozmiar_ramki;
+		nr_ramki = tablica_proc[ indeks ].tablica_stron[ indeks_strony ];
+		offset = adrs_log % rozmiar_ramki;
+		adres_FIZYCZNY = (nr_ramki * rozmiar_ramki) + offset;
+		return adres_FIZYCZNY;
+	}
+	
+	int znajdz_ramke()
+	{
+		znalezienie_ramki = false;
+		for( k = 0 ; k < liczba_ramek ; k++ )
+		{
+			if( wektor_zajetosci[ k ] == true )
+			{
+				znalezienie_ramki = true;
+				wektor_zajetosci [ k ] = false;
+				break;
+			}
+		}
+		
+		if( znalezienie_ramki == true )
+		{
+			nr_ramki2 = k;
+		}
+		else if( znalezienie_ramki == false )
+		{
+			nr_ramki2 = -1;
+		}
+		return nr_ramki2;
+	}
+	
+	void zapis_do_ramki( byte[] tab , int indeks , int nr_strony , int nr)
+	{
+		for( l = 0 ; l < tab.length ; l++ )
+		{
+			pamiec_op[ rozmiar_ramki * nr + l ] = tab[ l ];
+		}
+		wektor_zajetosci [ nr ] = false;
+		tablica_proc[ indeks ].tablica_stron[ nr_strony ] = nr;
+		tablica_proc[ indeks ].waznosc[ nr_strony ] = true; 		//ustawienie bitu waznosci na valid
+	}
+
 	public static void main(String[] args)
 	{
 		Scanner reading = new Scanner(System.in);
@@ -234,7 +250,9 @@ public class Pamiec
 		System.out.println("4. Wyswietl pamiec");
 		System.out.println("5. Wyswietl zawartosc tablicy stron procesu");
 		System.out.println("6. Wyswietl wektor zajetosci");
-		System.out.println("7. Wyjscie");
+		System.out.println("7. Sklonuj kod");
+		System.out.println("8. Nadpisz kod");
+		System.out.println("9. Wyjscie");
 		while( poprawnosc == true ){
 			
 			opcja = reading.nextInt();
@@ -245,7 +263,7 @@ public class Pamiec
 				{
 					System.out.println("Podaj dane do zapisu: ");
 					napis = reading.nextLine();
-					a.zapis(napis);
+					a.ZAPIS(napis);
 					System.out.println("Dane zapisano");
 					break;
 				}
@@ -255,7 +273,7 @@ public class Pamiec
 					indeks_procesu = reading.nextInt();
 					System.out.println("Podaj adres: ");
 					adres = reading.nextInt();
-					kupa = a.odczyt( indeks_procesu, adres );
+					kupa = a.ODCZYT( indeks_procesu, adres );
 					if( kupa == -1 ) System.out.println("Podano zly indeks lub adres!!");
 					else System.out.println( kupa );
 					break;
@@ -264,7 +282,7 @@ public class Pamiec
 				{
 					System.out.println("Podaj indeks procesu do usuniecia: ");
 					indeks_procesu = reading.nextInt();
-					kupa = a.usun_proces(indeks_procesu);
+					kupa = a.USUN(indeks_procesu);
 					if( kupa == -1) System.out.println("Podano zly indeks!!");
 					else System.out.println("Usunieto proces");
 					break;
@@ -310,6 +328,23 @@ public class Pamiec
 				}
 				case 7:
 				{
+					System.out.println("Podaj indeks procesu: ");
+					indeks_procesu = reading.nextInt();
+					adres = a.KLONUJ( indeks_procesu );
+					System.out.println("Klon zapisano pod adresem " + adres );
+					break;
+				}
+				case 8:
+				{
+					System.out.println("Podaj dane do nadpisania: ");
+					napis = reading.nextLine();
+					System.out.println("Podaj indeks procesu: ");
+					indeks_procesu = reading.nextInt();
+					System.out.println("Dane nadpisano pod adresem"	+ a.NADPISZ( napis , indeks_procesu ));
+					break;
+				}
+				case 9:
+				{
 					poprawnosc = false;
 					break;
 				}
@@ -323,6 +358,3 @@ public class Pamiec
 		reading.close();
 	}
 }
-
-//funkcja zapisuj¹ca do bufora bajty z procka
-//funkcja klonuj¹ca dan¹ ramke do innej (przyjmuje adres log klonowanej i zwraca adres nowej)
