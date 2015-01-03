@@ -74,6 +74,24 @@ class Iwezel{
 			read_2(dysk,wezly,nr);
 		}
 	}
+	////To samo co 2 poprzednie tylko zwraca string zamiast wypisywaæ na konsoli
+	public String read_s(Blok[] dysk,ArrayList<Iwezel> wezly){
+		String napis ="";
+		System.out.println("Ktory plik chcesz odczytac");
+		Scanner scan=new Scanner(System.in);
+		String zapis=scan.nextLine();
+		int nr = Integer.parseInt(zapis);
+		napis=read_2_s(dysk,wezly,wezly.get(nr).i_block,napis);
+		
+		return napis;
+	}
+	public String read_2_s(Blok[] dysk,ArrayList<Iwezel> wezly,int nr,String napis){
+		if(dysk[nr].nr_nast_bloku==0){
+			napis+=new String(dysk[nr].dane);
+			return napis;
+		}
+		return new String(dysk[nr].dane)+read_2_s(dysk,wezly,dysk[nr].nr_nast_bloku,napis);		
+	}
 	
 	//ZAWARTOSCDYSKU////////////////////////////////////////////
 	public void zawdysk(Blok[] dysk,ArrayList<Iwezel> wezly){
@@ -114,8 +132,7 @@ public class Pliki
 		ArrayList<Iwezel> wezly= new ArrayList<Iwezel>();
 		Blok[] dysktwardy=new Blok[32];	
 		for(int i=0;i<32;i++)dysktwardy[i]=new Blok();
-		System.out.println("TESTESTEST");
-		
+
 		while(x!=6){
 			System.out.println("1-stworz plik");
 			System.out.println("2-wyswietl plik");
@@ -123,6 +140,7 @@ public class Pliki
 			System.out.println("4-wyswietl zawartosc dysku");
 			System.out.println("5-wyswietl nazwy plikow");
 			System.out.println("6-wyjdz");
+			System.out.println("7-wyswietl plik_s");
 			System.out.println("Co chcesz zrobic:");
 			String zapis=scan.nextLine();
 			x = Integer.parseInt(zapis);
@@ -140,6 +158,9 @@ public class Pliki
 			}	
 			if(x==5){
 				wezly.get(0).wyswpliki(dysktwardy, wezly);
+			}
+			if(x==7){
+				System.out.println(wezly.get(0).read_s(dysktwardy, wezly));
 			}
 		}
 	}
