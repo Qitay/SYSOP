@@ -75,7 +75,7 @@ class Iwezel{
 		}
 	}
 	////To samo co 2 poprzednie tylko zwraca string zamiast wypisywaæ na konsoli
-	public String read_s(Blok[] dysk,ArrayList<Iwezel> wezly){
+	public String read_s(Blok[] dysk,ArrayList<Iwezel> wezly){////dysk i wezly to obiekty które dostaje ka¿da moja funkcja
 		String napis ="";
 		System.out.println("Ktory plik chcesz odczytac");
 		Scanner scan=new Scanner(System.in);
