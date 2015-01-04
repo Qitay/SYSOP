@@ -11,13 +11,12 @@ public class Pipe {
 	Pipe_Inode inode;
 	
 	
-	public Pipe(int fd[])
+	public Pipe()
 	{
-		 inode = get_pipe_inode();
-		 
+		
 	}
 	
-	public int pipe(int fd[])
+	public int create(int fd[])
 	{
 		//  sprawdzenie poprawnosci parametru fd;
 		
@@ -76,9 +75,11 @@ public class Pipe {
 		//////////////////////////////////////////////////////////////
 		List<Pipe_Inode> InodeList = new LinkedList<Pipe_Inode>();
 		int fd[] = new int [2];
+		Pipe pipe = new Pipe();
 		//////////////////////////////////////////////////////////////
 		
-		Pipe pipe = new Pipe(fd);
+		
+		pipe.write(fd, "asdfghjkl", 9);
 		
 
 		
