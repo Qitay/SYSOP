@@ -10,6 +10,7 @@ public class Pipe {
 		
 		//	przydziel nowy i-wezel z urzadzenia do przechowywania laczy
 		// 	(za pomoca funkcji get_pipe_inode);
+		Pipe_Inode inode = get_pipe_inode(fd);
 		
 		//	znajdz dwie wolne pozycje w tablicy plikow i przydziel pierwsza do
 		// 	czytania a druga do pisania fd[0] i fd[1];
