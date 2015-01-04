@@ -1,19 +1,33 @@
 package pipes;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Scanner;
+
 import processmanagement.*;
 
 public class Pipe {
+	
+	Pipe_Inode inode;
+	
+	
+	public Pipe(int fd[])
+	{
+		 inode = get_pipe_inode();
+		 
+	}
 	
 	public int pipe(int fd[])
 	{
 		//  sprawdzenie poprawnosci parametru fd;
 		
+		inode = get_pipe_inode();
 		//	przydziel nowy i-wezel z urzadzenia do przechowywania laczy
 		// 	(za pomoca funkcji get_pipe_inode);
-		Pipe_Inode inode = get_pipe_inode(fd);
+		
 		
 		//	znajdz dwie wolne pozycje w tablicy plikow i przydziel pierwsza do
-		// 	czytania a druga do pisania fd[0] i fd[1];
+		// 	czytania a druga do pisania ;
       	
 		//	znajdz dwie wolne pozycje w tablicy deskryptorow procesu i zainicjuj
 		// 	je, tak by wskazywaly na odpowiednie pozycje w tablicy plikow, 
@@ -28,19 +42,19 @@ public class Pipe {
 		return 0;
 	};
 	
-	public Pipe_Inode get_pipe_inode(int fd[])
+	public Pipe_Inode get_pipe_inode()
 	{
 		Pipe_Inode inode = new Pipe_Inode();
 		
 		return inode;
 	}
 	
-	public int write(int fd[])
+	public int write(int fd[], String input, int len)
 	{
 		return 0;
 	}
 	
-	public int read(int fd[])
+	public int read(int fd[], String output, int len)
 	{
 		return 0;
 	}
@@ -55,7 +69,18 @@ public class Pipe {
 	
 	public static void main(String[] args)
 	{
-		System.out.println("");
+		Scanner reading = new Scanner(System.in);
+		String txt;
+		System.out.println("Podaj tekst:");
+		txt = reading.nextLine();
+		//////////////////////////////////////////////////////////////
+		List<Pipe_Inode> InodeList = new LinkedList<Pipe_Inode>();
+		int fd[] = new int [2];
+		//////////////////////////////////////////////////////////////
+		
+		Pipe pipe = new Pipe(fd);
+		
+
 		
 	}
 }

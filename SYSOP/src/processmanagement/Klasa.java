@@ -25,7 +25,7 @@ public class Klasa {
 		nowy.nice = 0;
 		nowy.jestInitem = true;
 		
-		nowy.registerReturnValue=0;//nie dotyczy po prostu domyślna wartość ktora nic nie znaczy
+		nowy.registerReturnValue=0;//nie dotyczy po prostu domyslna wartosc ktora nic nie znaczy
 		nowy.licznikRozkazow=0;//nie dotyczy init nie ma kodu programu
 		
 		
@@ -35,7 +35,7 @@ public class Klasa {
 	
 	public void fork(proc parent)
 	{
-		System.out.print("Wywołano funkcję fork.");	
+		System.out.print("Wywolano funkcje fork.");	
 		
 		proc nowy = new proc();
 	
@@ -52,9 +52,9 @@ public class Klasa {
 		nowy.ppid=parent.pid;
 		
 		
-		//proces potomny wykonuje się w przestrzeni adresowej będącej kopią przestrzeni procesu rodzicielskiego
-		//dodać alokowanie pamięci !!!
-		//Funkcja fork tworzy deskryptor nowego procesu oraz kopię segmentu danych i stosu procesu macierzystego. 
+		//proces potomny wykonuje sie w przestrzeni adresowej bedacej kopia przestrzeni procesu rodzicielskiego
+		//dodac alokowanie pamieci !!!
+		//Funkcja fork tworzy deskryptor nowego procesu oraz kopie segmentu danych i stosu procesu macierzystego. 
 		
 		nowy.registerReturnValue=0;
 		parent.registerReturnValue=Global.mpid;
@@ -64,14 +64,14 @@ public class Klasa {
 		
 		ListaProcesow.add(nowy);
 		
-		//dopisać do listy procesów gotowych
+		//dopisac do listy procesow gotowych
 		//ArrayList<proc> Ready_list = new ArrayList<proc>();
 		//Ready_list.add(nowy);
 		System.out.println(" Stworzono proces o nr PID "+nowy.pid);	
 	}
 	public void fork()
 	{
-	//MUSZ�? MIEĆ DOST�?P DO ZMIENNEJ TYPU proc AKTUALNEGO PROCESU KTÓRĄ STWORZY OSOBA ZAJMUJĄCA SI�? PROCESOREM
+	//MUSZA MIEC DOSTEP DO ZMIENNEJ TYPU proc AKTUALNEGO PROCESU KTORA STWORZY OSOBA ZAJMUJACA SIE PROCESOREM
 	//jest to zmienna "aktualny" w klasie "procesor"
 		this.fork(PsM.PrM.procesor.aktualny);
 		
@@ -79,7 +79,7 @@ public class Klasa {
 
 	public void exec(proc procesZm,String path)
 	{
-		System.out.println("Wywołano funkcję exec");	
+		System.out.println("Wywolano funkcje exec");	
 		try {
 			
 			
@@ -93,15 +93,15 @@ public class Klasa {
 			}
 			br.close();
 			
-			//przekazanie stringa do pam otrzymanie adresu gdzie został zapisany ten string:
-			//int adr = obiekt.ZAPIS(tmp); <- zrobić moduł zarzPam i na obiekcie wywołać bo ta funkcja nie jest statyczna!!
+			//przekazanie stringa do pam otrzymanie adresu gdzie zostal� zapisany ten string:
+			//int adr = obiekt.ZAPIS(tmp); <- zrobic modul� zarzPam i na obiekcie wywolac bo ta funkcja nie jest statyczna!!
 			
-			System.out.println("Wczytano z pliku następujące rozkazy:");
-	        System.out.println(tmp); //sprawdzanie czy wszystko wczytało
+			System.out.println("Wczytano z pliku nastepujace rozkazy:");
+	        System.out.println(tmp); //sprawdzanie czy wszystko wczytalo
 
 			
 			
-			int adr = 893; //proteza pamięci zwraca jakiś numer oznaczający adres
+			int adr = 893; //proteza pamieci zwraca jakis numer oznaczajacy adres
 			
 			
 			
