@@ -1,5 +1,6 @@
 package processmanagement;
 
+
 public class ProcessMaganement {
 	
 Klasa klasa;

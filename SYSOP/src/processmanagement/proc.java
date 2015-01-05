@@ -1,4 +1,5 @@
 package processmanagement;
+
 import java.util.ArrayList;
 public class proc {
 
@@ -16,7 +17,8 @@ public class proc {
 	//ArrayList<Integer> tablicaDeskryptor—w = new ArrayList<Integer>();
 	ArrayList<Integer> pidyPotomkow;
 	//ArrayList<Integer> pidyPotomkowAdoptowanych;
-	int registerReturnValue; //0 jeæli funkcja jest stworzona przez proces macierzusty lub nr pid potomka jeæli ta funkcja go stworzyÅ‚a
+	int registerReturnValue; //FORK: 0 jeæli funkcja jest stworzona przez proces macierzusty lub nr pid potomka jeæli ta funkcja go stworzy¸a
+							 //WAIT: -1 jeæli proces nie mia¸ dzieci, jeæli mia¸ i jakieæ zakoÄczy¸o to jego pid
 	boolean jestInitem;
 	
 	Object [] cpu_stan; 
