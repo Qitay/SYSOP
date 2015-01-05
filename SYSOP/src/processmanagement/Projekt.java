@@ -1,10 +1,11 @@
 package processmanagement;
 
+
 import java.util.Scanner;
 public class Projekt {
 	
 public static void main(String[] args) {
-
+	
 		ProcessMaganement processM = new ProcessMaganement();
 		ProcesorManagement procesorM = new ProcesorManagement();
 		MemoryManagement MemoryM = new MemoryManagement();//----
@@ -18,9 +19,7 @@ public static void main(String[] args) {
 		MemoryM.PrM=procesorM;
 		MemoryM.PsM=processM;//-----
 		
-		
-		
-		
+
         System.out.println("Witamy w systemie");
 		
         processM.klasa.init();
@@ -52,23 +51,34 @@ public static void main(String[] args) {
         				processM.klasa.fork(p);
         				jestTakiProces=true;
         			}	
-        			
         		}
         		if(jestTakiProces==false)
         		{
-    				
         			System.out.println("Nie ma procesu o takim PID!");
-        				
         		}
-        		
         	}
+        }
+        else if(odczytano.equals("HELP")||odczytano.equals("help"))
+        {
+        		System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        		System.out.println("Proces init ma PID=1");
+        		System.out.println("");
+        		System.out.println("FORK   - tworzy nowy proces");
+        		System.out.println("EXECVE - laduje do pamieci nowy kod programu dla procesu");
+        		System.out.println("EXIT   - konczy dzia¸anie procesu");
+        		System.out.println("WAIT   - wymusza bezczynnosc do momentu zakonczenia dzia¸ania dowolnego procesu potomnego");
+        		System.out.println("PCB    - wyswietla blok kontrolny procesu");
+        		System.out.println("PCBALL - wyswietla bloki kontrolne wszystkich istniejˆcych proces—w");
+        		System.out.println("");
+        		System.out.println("HELP   - otwiera pomoc");
+        		System.out.println("help   - otwiera pomoc");
+        		System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         }
         else if(odczytano.equals("PCBALL"))
         {
-        	System.out.println("Wszystkie istniej?ce procesy:");
+        	System.out.println("Wszystkie istniejˆce procesy:");
         	for(int k=0;k<processM.klasa.ListaProcesow.size();k++)
         	{
-        		
         		System.out.println("PID: "+ processM.klasa.ListaProcesow.get(k).pid);
 				System.out.println("PPID: "+ processM.klasa.ListaProcesow.get(k).ppid);
 				System.out.println("UID: "+ processM.klasa.ListaProcesow.get(k).uid);
@@ -76,7 +86,7 @@ public static void main(String[] args) {
 				System.out.println("STAN PROCESU: "+ processM.klasa.ListaProcesow.get(k).s);
 				System.out.println("ADRES W PAMI¢CI: "+ processM.klasa.ListaProcesow.get(k).addr);
 				System.out.println("LICZNIK ROZKAZîW: "+ processM.klasa.ListaProcesow.get(k).licznikRozkazow);
-				System.out.println("WARTOåŒ ZWRACANA PRZEZ FORK: "+ processM.klasa.ListaProcesow.get(k).registerReturnValue);
+				System.out.println("WARTOåŒ ZWRACANA: "+ processM.klasa.ListaProcesow.get(k).registerReturnValue);
 				System.out.println("Numery PID potomk—w "+ processM.klasa.ListaProcesow.get(k).pidyPotomkow.toString());
 				if(processM.klasa.ListaProcesow.get(k).jestInitem==true)
 				{	
@@ -87,10 +97,7 @@ public static void main(String[] args) {
 				System.out.println("CZY PROCES JEST INITEM: NIE");
 				}
 				System.out.println("------------------------------------------------------------");
-        		
-        		
-        	}
-        		
+        	}	
         }
         else if(odczytano.equals("PCB"))
         {
@@ -110,8 +117,6 @@ public static void main(String[] args) {
         			p = processM.klasa.ListaProcesow.get(i); //get zwraca element o pozycji i
         			if(p.pid==numerPID)
         			{
-        				
-        				
         				System.out.println("PID: "+ p.pid);
         				System.out.println("PPID: "+ p.ppid);
         				System.out.println("UID: "+ p.uid);
@@ -119,7 +124,7 @@ public static void main(String[] args) {
         				System.out.println("STAN PROCESU: "+ p.s);
         				System.out.println("ADRES W PAMI¢CI: "+ p.addr);
         				System.out.println("LICZNIK ROZKAZîW: "+ p.licznikRozkazow);
-        				System.out.println("WARTOåŒ ZWRACANA PRZEZ FORK: "+ p.registerReturnValue);
+        				System.out.println("WARTOåŒ ZWRACANA: "+ p.registerReturnValue);
         				System.out.println("Numery PID potomk—w "+ p.pidyPotomkow.toString());
         				if(p.jestInitem==true)
         				{	
@@ -130,24 +135,13 @@ public static void main(String[] args) {
         				System.out.println("CZY PROCES JEST INITEM: NIE");
         				}
         				jestTakiProces=true;
-        				
         			}
-        				
         		}	
-        			
-        		
         		if(jestTakiProces==false)
         		{
-    				
         			System.out.println("Nie ma procesu o takim PID!");
-        				
         		}
-        	
-        	
         }
-        
-        
-        
         }
         else if(odczytano.equals("EXIT"))
         {
@@ -170,15 +164,39 @@ public static void main(String[] args) {
         				processM.klasa.exit(p);
         				jestTakiProces=true;
         			}	
-        			
         		}
         		if(jestTakiProces==false)
         		{
-    				
         			System.out.println("Nie ma procesu o takim PID!");
-        				
         		}
-        		
+        	}
+        }
+        else if(odczytano.equals("WAIT"))
+        {
+        	System.out.println("Podaj PID procesu na kt—rym wywo¸a funkcj« WAIT:");
+        	String numerP = odczyt.nextLine();
+        	if(jestIntem(numerP)==false)
+        	{
+        		System.out.println("B¸«dny format PID!");
+        	}
+        	else
+        	{
+        		int numerPID = Integer.parseInt(numerP); //zamiana wczytanego numer z string na int
+        		proc p = new proc();
+        		boolean jestTakiProces=false;
+        		for(int i =0;i<processM.klasa.ListaProcesow.size();i++)
+        		{	
+        			p = processM.klasa.ListaProcesow.get(i); //get zwraca element o pozycji i
+        			if(p.pid==numerPID)
+        			{
+        				processM.klasa.wait2(p);
+        				jestTakiProces=true;
+        			}
+        		}
+        		if(jestTakiProces==false)
+        		{
+        			System.out.println("Nie ma procesu o takim PID!");
+        		}
         	}
         }
         else if(odczytano.equals("EXECVE"))
@@ -199,41 +217,18 @@ public static void main(String[] args) {
         			p = processM.klasa.ListaProcesow.get(i); //get zwraca element o pozycji i
         			if(p.pid==numerPID)
         			{
-        				
-        				
         				processM.klasa.exec(p,"/Users/Czerniawska/Desktop/rozkazy.txt");
         				jestTakiProces=true;
-        				
-        			}
-        				
-        		}	
-        			
-        		
+        			}	
+        		}
         		if(jestTakiProces==false)
         		{
-    				
         			System.out.println("Nie ma procesu o takim PID!");
-        				
         		}
-        	
-        	
         }
-        
-        
-        
         }
-        
-        
-        
         }
-        
-        
         }
-		
-		
-		
-	
-
 public static boolean jestIntem(String s) {
     try 
     { 

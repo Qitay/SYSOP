@@ -1,4 +1,5 @@
 package processmanagement;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -88,7 +89,7 @@ public class Klasa {
 	}
 	public void fork()
 	{
-	//MUSZÄ? MIEÄ† DOSTÄ?P DO ZMIENNEJ TYPU proc AKTUALNEGO PROCESU KTÃ“RÄ„ STWORZY OSOBA ZAJMUJÄ„CA SIÄ? PROCESOREM
+	//MUSZÄ˜ MIEÄ† DOSTÄ˜P DO ZMIENNEJ TYPU proc AKTUALNEGO PROCESU KTÃ“RÄ„ STWORZY OSOBA ZAJMUJÄ„CA SIÄ˜ PROCESOREM
 	//jest to zmienna "aktualny" w klasie "procesor"
 		//this.fork(PsM.PrM.procesor.aktualny);
 		
@@ -102,9 +103,11 @@ public class Klasa {
 			
 			//  "/Users/Czerniawska/Desktop/rozkazy.txt"
 			
-			String tmp = null;
+			String tmp = "";
+			String tmp2 = "";
 			
-			BufferedReader br = new BufferedReader(new FileReader(path));
+			FileReader fr = new FileReader(path); 
+			BufferedReader br = new BufferedReader(fr);
 			/*
 			while (true){
 			String a = br.readLine();
@@ -116,27 +119,27 @@ public class Klasa {
 			*/
 			
 			
-			while ((br.readLine()) != null) {
-				tmp = tmp + br.readLine();
+			while ((tmp=br.readLine()) != null) {
+				tmp2=tmp2+tmp+"|";
 			}
 			br.close();
-					
+				
 			
-			System.out.println("Wczytano z pliku nast«puj?ce rozkazy:");
-	        System.out.println(tmp); //sprawdzanie czy wszystko wczytaÅ‚o
+			System.out.println("Wczytano z pliku do pami«ci nast«pujˆce rozkazy:");
+	        System.out.println(tmp2); //sprawdzanie czy wszystko wczytaÅ‚o
 
 			
 			
 			
 			//przekazanie stringa do pam otrzymanie adresu gdzie zostaÅ‚ zapisany ten string:
 
-			int adr =  PsM.MM.pam.NADPISZ(tmp, procesZm.addr);//czy w nowym miejscu czy na miejscu starego kodu programu??
-	        
+			
+	        int adr=  PsM.MM.pam.NADPISZ(tmp2,procesZm.addr);
 			
 			procesZm.addr=adr; //zmienia addr w oryginale bo przekazywane przez referencje
 			procesZm.licznikRozkazow=0;
 			
-			System.out.println("joÅ‚!");
+			
 			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -149,40 +152,64 @@ public class Klasa {
 		
 		
 	}
+	public void wait2(proc p)
+	{
+		System.out.println("Wywo¸ano funkcj« wait");	
+		wait1(p);
+	}
+	
 	public void wait1(proc p)
 	{
+		//System.out.println("Wywo¸ano funkcj« wait");	
+		
 		p.s=stan.OCZEKUJACY;
+		//trafia na kolejk« oczekujˆcych czy co??
 		
-		
-		/*
-		 int wait ( int *status );
-		w zmiennej "status" jest zwracana informacja o sposobie zakoÅ„czenia dziaÅ‚ania potomka;
-		wartoÅ›ciÄ… zwracanÄ… przez wait() jest PID procesu potomnego, ktÃ³ry siÄ™ zakoÅ„czyÅ‚
-	    niech: status == HHLL (4 cyfry hex)
-
-	    potomek zakoÅ„czyÅ‚ siÄ™ przez wywoÅ‚anie "exit(y)"; wtedy HH=y, LL=0
-	    potomek zakoÅ„czyÅ‚ siÄ™ z powodu sygnaÅ‚u; wtedy HH=0, 7-my bit LL zawiera 1 jeÅ›li 
-	    wygenerowano plik "core", bity 6-0 LL zawierajÄ… nr sygnaÅ‚u
-		
-		*Waiting for any some child to terminate: wait()
-		*Blocks until some child terminates
-		*Returns the process ID of the child process
-		*Or returns -1  no children exist(i.e., already exited)
-		*
-		*
-		*
-		*
-		*The wait function suspends execution of the current process until a child has exited,
-		* or until a signal is delivered whose action is to terminate the current process or to call a 
-		* signal handling function. If a child has already exited by the time of the call 
-		* (a so-called "zombie" process), 
-		*the function returns immediately. Any system resources used by the child are freed. 
-		*
-		*/
+		//Jeæli proces nie mia¸ dzieci to od razu wraca do stanu ready i w registerReturnValue -1
+		if(p.pidyPotomkow.isEmpty())
+		{
+			p.s=stan.GOTOWY;
+			p.registerReturnValue=-1;
+		}
+		else
+		{
+		//sprawdza stany dzieci i szuka jakiegoæ terminated
+		//Jeæli znajdzie to wpisuje sobie jego kod exitu i w registerReturnValue pid tego dziecka 
+		//a status zmienia znowu na READY
+		//usuwa terminated dziecko z listy proces—w
+		//usuwa dziecko z pidyPotomkow
+			petla:
+				for(int i=0;i<p.pidyPotomkow.size();i++)
+				{
+					for(int j=0;j<ListaProcesow.size();j++)
+					{
+						if(ListaProcesow.get(j).pid==p.pidyPotomkow.get(i))
+						{
+							if(ListaProcesow.get(j).s==stan.ZAKONCZONY) //equals??
+							{
+								p.ChildExitStatus=ListaProcesow.get(j).ExitStatus;
+								p.registerReturnValue=ListaProcesow.get(j).pid;
+								ListaProcesow.remove(j);
+								p.pidyPotomkow.remove(i);
+								p.s=stan.GOTOWY;
+								break petla;
+							}
+				
+						}
+					}
+				}
+		}		
 	}
 	public void exit(proc p)
 	{
 		System.out.println("Wywo¸ano funkcj« exit");	
+		
+		if(p.pid==1)
+		{
+		System.out.println("Nie zabito procesu init. Proces init b«dzie zabity przy zakoÄczeniu shella.");	
+		}
+		else
+		{
 		//zapisuje (do pcb?)argument exita
 		p.ExitStatus=1;
 		//zamkni«cie deskryptor—w plik—w danego procesu
@@ -191,7 +218,7 @@ public class Klasa {
 		PsM.MM.pam.USUN(p.addr);
 		
 		
-		//na liæcie gotowych teý sprawdzi jeæli uda si« po¸?czy projekt!
+		//na liæcie gotowych teý sprawdzi jeæli uda si« po¸ˆczy projekt!
 		//zmienienie ppid potomk—w zabijanego procesu na 1
 		for(int i =0;i<p.pidyPotomkow.size();i++)
 		{
@@ -213,12 +240,28 @@ public class Klasa {
 		p.pidyPotomkow.clear();
 		
 		p.s=stan.ZAKONCZONY;	
+		
+		
+		//sprawdza czy rodzic juý czeka¸( czy status rodzica by¸ waiting) 
+		//i jeæli tak to wywo¸uje jeszcze raz funkcj« wait na rodzicu
+		
+		for(int j=0;j<ListaProcesow.size();j++)
+		{
+			if(ListaProcesow.get(j).pid==p.ppid)
+			{
+				if(ListaProcesow.get(j).s==stan.OCZEKUJACY)
+				{
+				wait1(ListaProcesow.get(j));
+				}
+			}
 			
+			
+		}
 		//the process's parent is sent a SIGCHLD signal. przez pipe???
 		
 		//The value status is returned to the parent process as the process's exit status,
 		//and can be collected using one of the wait family of calls. 
 	}
-	
+	}
 	
 }
