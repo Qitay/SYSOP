@@ -7,8 +7,12 @@ public static void main(String[] args) {
 
 		ProcessMaganement processM = new ProcessMaganement();
 		ProcesorManagement procesorM = new ProcesorManagement();
+		MemoryManagement MemoryM = new MemoryManagement();//----
+		
 		processM.PrM=procesorM;
+		processM.MM=MemoryM;
 		procesorM.PsM=processM;
+		MemoryM.PsM=processM;//-----
 		
         System.out.println("Witamy w systemie");
 		

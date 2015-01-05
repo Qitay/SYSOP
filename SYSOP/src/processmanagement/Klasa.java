@@ -25,7 +25,9 @@ public class Klasa {
 		nowy.nice = 0;
 		nowy.jestInitem = true;
 		
-		nowy.registerReturnValue=0;//nie dotyczy po prostu domyslna wartosc ktora nic nie znaczy
+		nowy.addr=PsM.MM.pam.ZAPIS(" ");
+		
+		nowy.registerReturnValue=0;//nie dotyczy po prostu domyślna wartość ktora nic nie znaczy
 		nowy.licznikRozkazow=0;//nie dotyczy init nie ma kodu programu
 		
 		
@@ -35,7 +37,7 @@ public class Klasa {
 	
 	public void fork(proc parent)
 	{
-		System.out.print("Wywolano funkcje fork.");	
+		System.out.print("Wywołano funkcję fork.");	
 		
 		proc nowy = new proc();
 	
@@ -51,10 +53,16 @@ public class Klasa {
 		nowy.pid=Global.mpid;
 		nowy.ppid=parent.pid;
 		
+	
 		
-		//proces potomny wykonuje sie w przestrzeni adresowej bedacej kopia przestrzeni procesu rodzicielskiego
-		//dodac alokowanie pamieci !!!
-		//Funkcja fork tworzy deskryptor nowego procesu oraz kopie segmentu danych i stosu procesu macierzystego. 
+		
+		
+		//proces potomny wykonuje się w przestrzeni adresowej będącej kopią przestrzeni procesu rodzicielskiego
+		
+		nowy.addr=PsM.MM.pam.KLONUJ(parent.addr); //w arg parent.addr 
+		
+		
+		//Funkcja fork tworzy deskryptor nowego procesu oraz kopię segmentu danych i stosu procesu macierzystego. 
 		
 		nowy.registerReturnValue=0;
 		parent.registerReturnValue=Global.mpid;
@@ -64,14 +72,14 @@ public class Klasa {
 		
 		ListaProcesow.add(nowy);
 		
-		//dopisac do listy procesow gotowych
+		//dopisać do listy procesów gotowych
 		//ArrayList<proc> Ready_list = new ArrayList<proc>();
 		//Ready_list.add(nowy);
 		System.out.println(" Stworzono proces o nr PID "+nowy.pid);	
 	}
 	public void fork()
 	{
-	//MUSZA MIEC DOSTEP DO ZMIENNEJ TYPU proc AKTUALNEGO PROCESU KTORA STWORZY OSOBA ZAJMUJACA SIE PROCESOREM
+	//MUSZ�? MIEĆ DOST�?P DO ZMIENNEJ TYPU proc AKTUALNEGO PROCESU KTÓRĄ STWORZY OSOBA ZAJMUJĄCA SI�? PROCESOREM
 	//jest to zmienna "aktualny" w klasie "procesor"
 		this.fork(PsM.PrM.procesor.aktualny);
 		
@@ -79,7 +87,7 @@ public class Klasa {
 
 	public void exec(proc procesZm,String path)
 	{
-		System.out.println("Wywolano funkcje exec");	
+		System.out.println("Wywołano funkcję exec");	
 		try {
 			
 			
@@ -88,22 +96,33 @@ public class Klasa {
 			String tmp = null;
 			
 			BufferedReader br = new BufferedReader(new FileReader(path));
+			/*
+			while (true){
+			String a = br.readLine();
+			if(a!=null)
+				break;
+				tmp+=a;
+			}
+			br.close();
+			*/
+			
+			
 			while ((br.readLine()) != null) {
 				tmp = tmp + br.readLine();
 			}
 			br.close();
+					
 			
-			//przekazanie stringa do pam otrzymanie adresu gdzie zostal� zapisany ten string:
-			//int adr = obiekt.ZAPIS(tmp); <- zrobic modul� zarzPam i na obiekcie wywolac bo ta funkcja nie jest statyczna!!
-			
-			System.out.println("Wczytano z pliku nastepujace rozkazy:");
-	        System.out.println(tmp); //sprawdzanie czy wszystko wczytalo
+			System.out.println("Wczytano z pliku następujące rozkazy:");
+	        System.out.println(tmp); //sprawdzanie czy wszystko wczytało
 
 			
 			
-			int adr = 893; //proteza pamieci zwraca jakis numer oznaczajacy adres
 			
-			
+			//przekazanie stringa do pam otrzymanie adresu gdzie został zapisany ten string:
+
+			int adr =  PsM.MM.pam.NADPISZ(tmp, procesZm.addr);//czy w nowym miejscu czy na miejscu starego kodu programu??
+	        
 			
 			procesZm.addr=adr; //zmienia addr w oryginale bo przekazywane przez referencje
 			procesZm.licznikRozkazow=0;
@@ -123,15 +142,24 @@ public class Klasa {
 	}
 	public void wait1()
 	{
-		
-		
-		
-		
+		/*
+		 int wait ( int *status );
+		w zmiennej "status" jest zwracana informacja o sposobie zakończenia działania potomka;
+		wartością zwracaną przez wait() jest PID procesu potomnego, który się zakończył
+	    niech: status == HHLL (4 cyfry hex)
+
+	    potomek zakończył się przez wywołanie "exit(y)"; wtedy HH=y, LL=0
+	    potomek zakończył się z powodu sygnału; wtedy HH=0, 7-my bit LL zawiera 1 jeśli wygenerowano plik "core", bity 6-0 LL zawierają nr sygnału
+		*/
 	}
 	public void exit()
 	{
+		//zamknięcie deskryptorów plików danego procesu
 		
-		
+		//procesy potomne tego procesu są adoptowane przez init
+		//void exit(int kod_zakończenia)
+		//funkcja "exit()" - powoduje zakończenie procesu potomnego, przekazany parametr może być odczytany przez proces macierzysty.
+		//proces musi zasygnalizować rodzicowi że zginął??? przez pipe???
 		
 	}
 	

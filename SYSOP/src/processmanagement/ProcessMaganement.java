@@ -4,6 +4,7 @@ public class ProcessMaganement {
 	
 Klasa klasa;
 ProcesorManagement PrM;
+MemoryManagement MM;//-----
 
 ProcessMaganement()
 {

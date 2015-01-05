@@ -30,18 +30,4 @@ public class Pipe_Inode {
         	readers = 0;
         	writers = 0;
          }
-         
-         String ToString( byte[] bufor )
-      	 {
-	      	String tmp = null;
-	      	try 
-	      	{
-	      		tmp = new String(bufor, "UTF-8");	//konwersja byte -> String
-	      	} 
-	      	catch (UnsupportedEncodingException e) 
-	      	{
-	      		e.printStackTrace();
-	      	}
-	      	return tmp;
-      	 }
 }

@@ -8,58 +8,79 @@ import processmanagement.*;
 
 public class Pipe {
 	
-	Pipe_Inode inode;
+	List<Pipe_Inode> InodeList; //
+	File FileTab[]; 			// odpowiada tablicy plików 
+								// przechowuje informacje czy mo¿na czytaæ, czy pisaæ i odnoœnik do Inode na InodeList
 	
+	int licznik; 				// zmienna pomocnicza iloœæ istniej¹cych pipes
 	
 	public Pipe()
 	{
-		
+		InodeList = new LinkedList<Pipe_Inode>();
+		FileTab = new File[32];
+		for (int i=0; i<31; i++)
+		{
+			FileTab[i] = null;
+		}
+		licznik = 0;
 	}
 	
-	public int create(int fd[])
+	public int DoPipe(int fd[])
 	{
-		//  sprawdzenie poprawnosci parametru fd;
-		
-		inode = get_pipe_inode();
+		get_pipe_inode();
 		//	przydziel nowy i-wezel z urzadzenia do przechowywania laczy
 		// 	(za pomoca funkcji get_pipe_inode);
 		
-		
+		get_filetable_positions();
 		//	znajdz dwie wolne pozycje w tablicy plikow i przydziel pierwsza do
-		// 	czytania a druga do pisania ;
+		//	czytania a druga do pisania 
+		// 	zainicjuj znalezione pozycje w tablicy plikow, by wskazywaly na nowy i-wezel
+		
       	
 		//	znajdz dwie wolne pozycje w tablicy deskryptorow procesu i zainicjuj
 		// 	je, tak by wskazywaly na odpowiednie pozycje w tablicy plikow, 
 		// 	podstawiajac od razu odpowiednie wartosci w argumencie fd
 		//	(fd[0]= deskryptor do czytania, fd[1]= deskryptor do pisania);
-      	
-		//	zainicjuj znalezione pozycje w tablicy plikow, by wskazywaly na nowy i-wezel;
-   		
-		//	ustaw flagi i wskaznik do struktury z operacjami w znalezionych pozycjach
-		//	w tablicy plikow odpowiednio do czytania i pisania;
+		
+      	fd[0] = licznik;
+      	fd[1] = licznik + 1;
 		
 		return 0;
 	};
 	
-	public Pipe_Inode get_pipe_inode()
+	public void get_pipe_inode()
 	{
 		Pipe_Inode inode = new Pipe_Inode();
-		
-		return inode;
+		InodeList.add( inode );
 	}
+	public void get_filetable_positions()
+	{
+		File fd0 = new File();
+		fd0.loc = licznik;
+		fd0.readwrite = false;
+		File fd1 = new File();
+		fd1.loc = licznik;
+		fd1.readwrite = true;
+		
+	}
+	
+	
 	
 	public int write(int fd[], String input, int len)
 	{
+		
 		return 0;
 	}
 	
 	public int read(int fd[], String output, int len)
 	{
+		
 		return 0;
 	}
 	
 	public int close(int fd[])
 	{
+		
 		return 0;
 	}
 	
@@ -73,11 +94,12 @@ public class Pipe {
 		System.out.println("Podaj tekst:");
 		txt = reading.nextLine();
 		//////////////////////////////////////////////////////////////
-		List<Pipe_Inode> InodeList = new LinkedList<Pipe_Inode>();
+		
 		int fd[] = new int [2];
 		Pipe pipe = new Pipe();
 		//////////////////////////////////////////////////////////////
 		
+		pipe.DoPipe(fd);
 		
 		pipe.write(fd, "asdfghjkl", 9);
 		
