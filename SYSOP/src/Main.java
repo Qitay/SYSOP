@@ -5,13 +5,14 @@ import procesor.*;
 import processmanagement.*;
 import users.*;
 
-public class System {
+public class Main {
 
 	Pliki pliki;
 	Pamiec pamiec;
 	Pipe pipes;
 	Klasa oli;
-	public System()
+	
+	public Main()
 	{
 		pliki = new Pliki();
 		pamiec = new Pamiec();
@@ -19,8 +20,10 @@ public class System {
 		oli = new Klasa();
 	}
 	public static void main(String[] args) {
-		System sys = new System();
-		
+		Main sys = new Main();
+		sys.pamiec;
+		sys.
+		System.out.println("Stworzono nowy system");
 		///.....
 
 	}

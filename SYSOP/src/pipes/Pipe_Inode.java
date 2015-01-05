@@ -7,7 +7,7 @@ public class Pipe_Inode {
                                pisac do pelnego lacza oraz tych,
                                ktore chca czytac z pustego lacza */
 	
-         byte[] buff;         // bufor danych
+         String buff;         // bufor danych
 
          int start;         // poczatek danych w buforze
          int len;           // dlugosc danych
@@ -23,7 +23,7 @@ public class Pipe_Inode {
          
          public Pipe_Inode()
          {
-        	buff = new byte[32];
+        	buff = null;
         	start = 0;
         	len = 0;
         	lock = 0;

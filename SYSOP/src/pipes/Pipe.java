@@ -61,19 +61,38 @@ public class Pipe {
 		File fd1 = new File();
 		fd1.loc = licznik;
 		fd1.readwrite = true;
-		
+		for (int i=0; i<31; i++)
+		{
+			if (FileTab[i] == null)
+			{
+				FileTab[i] = fd0;
+				FileTab[i+1] = fd1;
+				break;
+			}
+		}
+		licznik = 0;	
 	}
 	
-	
-	
-	public int write(int fd[], String input, int len)
+	public int write(int fd, String input)
+	{
+		if(FileTab[fd].readwrite == true)
+		{
+			int tmp;
+			tmp = FileTab[fd].loc;
+			
+			return 0;
+		}
+		else
+		{
+			System.out.println("B³¹d zapisu: pole read-only");
+			return 1;
+		}
+	}
+		
+		
+	public int read(int fd, String output)
 	{
 		
-		return 0;
-	}
-	
-	public int read(int fd[], String output, int len)
-	{
 		
 		return 0;
 	}
@@ -89,19 +108,26 @@ public class Pipe {
 	
 	public static void main(String[] args)
 	{
-		Scanner reading = new Scanner(System.in);
-		String txt;
-		System.out.println("Podaj tekst:");
-		txt = reading.nextLine();
-		//////////////////////////////////////////////////////////////
-		
+
 		int fd[] = new int [2];
-		Pipe pipe = new Pipe();
-		//////////////////////////////////////////////////////////////
 		
+		Pipe pipe = new Pipe();
 		pipe.DoPipe(fd);
 		
-		pipe.write(fd, "asdfghjkl", 9);
+		//////////////// WRITE ///////////////////////////////////////
+		Scanner reading = new Scanner(System.in);
+		String txt;
+		System.out.println("Funkcja WRITE - Podaj dane do wczytania:");
+		txt = reading.nextLine();
+		pipe.write(fd[0], txt);
+		//////////////////////////////////////////////////////////////
+		
+		///////////////// READ ///////////////////////////////////////
+		String output = null;
+		pipe.read(fd[1], output);
+		System.out.println("Funkcja READ - Odczytano dane:" + output);
+		
+		
 		
 
 		
