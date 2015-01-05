@@ -10,6 +10,7 @@ public class MemoryManagement { //----
 	Plik_wymiany plik_w;
 	Pamiec pam;
 	ProcessMaganement PsM;
+	public ProcesorManagement PrM;
 	
 	
 	MemoryManagement(){

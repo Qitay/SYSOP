@@ -8,13 +8,19 @@ public class proc {
 	//String stan;
 	stan s;
 	int nice;
+	int cpu;
 	int licznikRozkazow; // wskazuje adres nastÄ™pnego rozkazu do wykonania  
 	int addr; //adres w bloku pamiÄ™ci
-	
-	ArrayList<Integer> tablicaDeskryptorow = new ArrayList<Integer>();
-	
-	//ArrayList<Integer> pidyPotomkow = new ArrayList<Integer>();
-	int registerReturnValue; //0 jeÅ›li funkcja jest stworzona przez proces macierzusty lub nr pid potomka jeÅ›li ta funkcja go stworzyÅ‚a
+	int ExitStatus; //1 oznacza poprawne zakoÄczenie procesu
+	int ChildExitStatus;//exit status potomka
+	//ArrayList<Integer> tablicaDeskryptor—w = new ArrayList<Integer>();
+	ArrayList<Integer> pidyPotomkow;
+	//ArrayList<Integer> pidyPotomkowAdoptowanych;
+	int registerReturnValue; //0 jeæli funkcja jest stworzona przez proces macierzusty lub nr pid potomka jeæli ta funkcja go stworzyÅ‚a
 	boolean jestInitem;
+	
+	Object [] cpu_stan; 
+	
+	
 }
 

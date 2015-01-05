@@ -21,12 +21,17 @@ public class Klasa {
 		nowy.s = stan.NOWY;
 		nowy.pid = Global.mpid;
 		nowy.ppid = 0;
-		nowy.uid = 0;
-		nowy.nice = 0;
+		nowy.uid = 0;//superuıytkownik root ma UID 0,
+		nowy.nice = 0; //zaleıne od uıytkownika
+		//DomyÅ›lnie wartoæ nice ustawiana jest na 20 dla uıytkownika domyælnego?
+		nowy.cpu =0; //miara wykorzystaina proc
 		nowy.jestInitem = true;
-		
+		nowy.cpu_stan =new Object[6];
+		nowy.pidyPotomkow=new ArrayList<Integer>();
+		//nowy.tablicaDeskryptorÃ³w = null;
+		nowy.ExitStatus=0;
 		nowy.addr=PsM.MM.pam.ZAPIS(" ");
-		
+		nowy.ChildExitStatus=0;
 		nowy.registerReturnValue=0;//nie dotyczy po prostu domyÅ›lna wartoÅ›Ä‡ ktora nic nie znaczy
 		nowy.licznikRozkazow=0;//nie dotyczy init nie ma kodu programu
 		
@@ -37,7 +42,7 @@ public class Klasa {
 	
 	public void fork(proc parent)
 	{
-		System.out.print("WywoÅ‚ano funkcjÄ™ fork.");	
+		System.out.print("Wywo¸ano funkcj« fork.");	
 		
 		proc nowy = new proc();
 	
@@ -52,15 +57,16 @@ public class Klasa {
 		Global.mpid++;
 		nowy.pid=Global.mpid;
 		nowy.ppid=parent.pid;
+		//nowy.tablicaDeskryptorÃ³w=parent.tablicaDeskryptorÃ³w;
+		parent.pidyPotomkow.add(nowy.pid);
+		nowy.pidyPotomkow=new ArrayList<Integer>();
 		
-	
-		
-		
+		nowy.cpu=parent.cpu;
 		
 		//proces potomny wykonuje siÄ™ w przestrzeni adresowej bÄ™dÄ…cej kopiÄ… przestrzeni procesu rodzicielskiego
 		
 		nowy.addr=PsM.MM.pam.KLONUJ(parent.addr); //w arg parent.addr 
-		
+	 
 		
 		//Funkcja fork tworzy deskryptor nowego procesu oraz kopiÄ™ segmentu danych i stosu procesu macierzystego. 
 		
@@ -70,6 +76,9 @@ public class Klasa {
 		nowy.licznikRozkazow=parent.licznikRozkazow;
 		nowy.s=stan.GOTOWY;
 		
+		nowy.cpu_stan =new Object[6];
+		nowy.ChildExitStatus=0;
+		nowy.ExitStatus=0;
 		ListaProcesow.add(nowy);
 		
 		//dopisaÄ‡ do listy procesÃ³w gotowych
@@ -81,13 +90,13 @@ public class Klasa {
 	{
 	//MUSZÄ? MIEÄ† DOSTÄ?P DO ZMIENNEJ TYPU proc AKTUALNEGO PROCESU KTÃ“RÄ„ STWORZY OSOBA ZAJMUJÄ„CA SIÄ? PROCESOREM
 	//jest to zmienna "aktualny" w klasie "procesor"
-		this.fork(PsM.PrM.procesor.aktualny);
+		//this.fork(PsM.PrM.procesor.aktualny);
 		
 	}
 
 	public void exec(proc procesZm,String path)
 	{
-		System.out.println("WywoÅ‚ano funkcjÄ™ exec");	
+		System.out.println("Wywo¸ano funkcj« exec");	
 		try {
 			
 			
@@ -113,7 +122,7 @@ public class Klasa {
 			br.close();
 					
 			
-			System.out.println("Wczytano z pliku nastÄ™pujÄ…ce rozkazy:");
+			System.out.println("Wczytano z pliku nast«puj?ce rozkazy:");
 	        System.out.println(tmp); //sprawdzanie czy wszystko wczytaÅ‚o
 
 			
@@ -140,8 +149,11 @@ public class Klasa {
 		
 		
 	}
-	public void wait1()
+	public void wait1(proc p)
 	{
+		p.s=stan.OCZEKUJACY;
+		
+		
 		/*
 		 int wait ( int *status );
 		w zmiennej "status" jest zwracana informacja o sposobie zakoÅ„czenia dziaÅ‚ania potomka;
@@ -149,18 +161,63 @@ public class Klasa {
 	    niech: status == HHLL (4 cyfry hex)
 
 	    potomek zakoÅ„czyÅ‚ siÄ™ przez wywoÅ‚anie "exit(y)"; wtedy HH=y, LL=0
-	    potomek zakoÅ„czyÅ‚ siÄ™ z powodu sygnaÅ‚u; wtedy HH=0, 7-my bit LL zawiera 1 jeÅ›li wygenerowano plik "core", bity 6-0 LL zawierajÄ… nr sygnaÅ‚u
+	    potomek zakoÅ„czyÅ‚ siÄ™ z powodu sygnaÅ‚u; wtedy HH=0, 7-my bit LL zawiera 1 jeÅ›li 
+	    wygenerowano plik "core", bity 6-0 LL zawierajÄ… nr sygnaÅ‚u
+		
+		*Waiting for any some child to terminate: wait()
+		*Blocks until some child terminates
+		*Returns the process ID of the child process
+		*Or returns -1  no children exist(i.e., already exited)
+		*
+		*
+		*
+		*
+		*The wait function suspends execution of the current process until a child has exited,
+		* or until a signal is delivered whose action is to terminate the current process or to call a 
+		* signal handling function. If a child has already exited by the time of the call 
+		* (a so-called "zombie" process), 
+		*the function returns immediately. Any system resources used by the child are freed. 
+		*
 		*/
 	}
-	public void exit()
+	public void exit(proc p)
 	{
-		//zamkniÄ™cie deskryptorÃ³w plikÃ³w danego procesu
+		System.out.println("Wywo¸ano funkcj« exit");	
+		//zapisuje (do pcb?)argument exita
+		p.ExitStatus=1;
+		//zamkni«cie deskryptor—w plik—w danego procesu
+	
+		//zwolnienie pami«ci
+		PsM.MM.pam.USUN(p.addr);
 		
-		//procesy potomne tego procesu sÄ… adoptowane przez init
-		//void exit(int kod_zakoÅ„czenia)
-		//funkcja "exit()" - powoduje zakoÅ„czenie procesu potomnego, przekazany parametr moÅ¼e byÄ‡ odczytany przez proces macierzysty.
-		//proces musi zasygnalizowaÄ‡ rodzicowi Å¼e zginÄ…Å‚??? przez pipe???
 		
+		//na liæcie gotowych teı sprawdzi jeæli uda si« po¸?czy projekt!
+		//zmienienie ppid potomk—w zabijanego procesu na 1
+		for(int i =0;i<p.pidyPotomkow.size();i++)
+		{
+			for(int j=0;j<ListaProcesow.size();j++)
+			{
+				if(ListaProcesow.get(j).pid==p.pidyPotomkow.get(i)) //equals() ??
+				{
+					ListaProcesow.get(j).ppid=1;
+				}
+			}
+		}
+		//dodanie nowych adoptowanych potomk—w do listy potomk—w procesu init
+		for(int i =0;i<p.pidyPotomkow.size();i++)
+		{
+			
+		ListaProcesow.get(0).pidyPotomkow.add(p.pidyPotomkow.get(i));
+		}
+		
+		p.pidyPotomkow.clear();
+		
+		p.s=stan.ZAKONCZONY;	
+			
+		//the process's parent is sent a SIGCHLD signal. przez pipe???
+		
+		//The value status is returned to the parent process as the process's exit status,
+		//and can be collected using one of the wait family of calls. 
 	}
 	
 	
