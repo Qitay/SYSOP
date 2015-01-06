@@ -1,11 +1,13 @@
-package cpumanagement;
+package processmanagement;
+
 
 public class ProcessMaganement {
 	
 Klasa klasa;
-public ProcesorManagement PrM;
+ProcesorManagement PrM;
+MemoryManagement MM;//-----
 
-public ProcessMaganement()
+ProcessMaganement()
 {
 	klasa = new Klasa();
 	klasa.PsM=this; //ustawia "PsM" klasy na aktualny obiekt typu ProcessMaganement

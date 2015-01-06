@@ -1,4 +1,5 @@
 package memory;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -11,29 +12,23 @@ import java.util.List;
 
 public class Plik_wymiany
 {
-	String tmp, tmp2;		//Obiekt pomocniczy
+	String tmp, tmp2, tmp3;		//Obiekty pomocnicze
 	String[] linie_pliku;
 	
-	int i, j;
+	int i, j, potrzebna_linia;
+	int[] b, c;		//tablica pomocnicza
 	File plik;		//plik wymiany
 	FileWriter zapis = null;
 	FileReader odczyt = null;
 	BufferedReader odczytywanie = null;
 	
-	List<Integer> lista;
+	List<int[]> lista;
 	
 	protected Plik_wymiany()
 	{
-		lista = new LinkedList<Integer>();
+		b = new int[ 2 ];
+		lista = new LinkedList<int[]>();
 		plik = new File ( "Plik_wymiany.txt" );
-		try
-		{
-			odczyt = new FileReader ( plik );
-		} 
-		catch (FileNotFoundException e)
-		{
-			e.printStackTrace();
-		}
 	}
 	
 	String konwersja( byte[] bufor )
@@ -46,11 +41,10 @@ public class Plik_wymiany
 		{
 			e.printStackTrace();
 		}
-		tmp = tmp.substring ( 0,9 );
 		return tmp;
 	}
 	
-	void zapis_plik( byte[] bufor )
+	void zapis_plik( byte[] bufor , int x , int y )
 	{
 		tmp2 = konwersja(bufor);
 
@@ -68,22 +62,43 @@ public class Plik_wymiany
 		{
 			e.printStackTrace();
 		}
+		dodaj_na_liste( x , y );
 	}
 	
-	void dodaj_na_liste( int j )
+	void dodaj_na_liste( int x , int y )
 	{
-		lista.add( j );
+		b = new int[ 2 ];
+		b[ 0 ] = x;
+		b[ 1 ] = y;
+		lista.add( b );
 	}
 	
-	String odczyt( int k )
+	String sprowadzenie_strony( int k , int j )
 	{
+		try
+		{
+			odczyt = new FileReader ( plik );
+		} 
+		catch (FileNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		for( i = 0 ; i < lista.size() ; i++ )
+		{
+			b = new int[ 2 ];
+			b = lista.get(i);
+			if( b[0] == k && b[1] == j )
+			{
+				potrzebna_linia = i;
+			}
+		}
 		i = 0;
 		odczytywanie = new BufferedReader( odczyt );
 		try 
 		{
-			if( k!=0 )
+			if( potrzebna_linia!=0 )
 			{
-				while( odczytywanie.readLine() != null && i < k - 1 )
+				while( odczytywanie.readLine() != null && i < potrzebna_linia - 1 )
 				{
 					i++;
 				}
@@ -98,12 +113,24 @@ public class Plik_wymiany
 		return tmp;
 	}
 	
-	void usun_strone( int k )
+	void usun_strone( int indeks , int nr_strony )
 	{
+		try
+		{
+			odczyt = new FileReader ( plik );
+		} 
+		catch (FileNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		c = new int[ 2 ];
+		b = new int[ 2 ];
+		b[ 0 ] = indeks;
+		b[ 1 ] = nr_strony;
 		odczytywanie = new BufferedReader( odczyt );
 		linie_pliku = new String[lista.size()];
 		
-		for(i=0;i<lista.size();i++)
+		for( i = 0 ; i < lista.size() ; i++ )
 		{			
 			try 
 			{
@@ -113,8 +140,8 @@ public class Plik_wymiany
 			{
 				e.printStackTrace();
 			}
-			
-			if( i==k )
+			c = lista.get(i);
+			if( c[0] == b[0] && c[1] == b[1] )
 			{	
 				linie_pliku [ i ] = null;
 				lista.remove(i);
@@ -132,15 +159,7 @@ public class Plik_wymiany
 			{
 				e.printStackTrace();
 			}
-		}
-		
-		/*for( i = 0 ; i < lista.size(); i++ )
-		{
-			System.out.print(linie_pliku [ i ]+ " ");
-			System.out.println(lista.get(i));
-		}*/
-		
-		
+		}		
 		
 		try
 		{
@@ -172,11 +191,91 @@ public class Plik_wymiany
 			{
 				e.printStackTrace();
 			}
-		}
+		} 
 		try {
 			zapis.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			odczyt.close();
+			odczytywanie.close();
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	void nadpisz_strone( byte[] bufor , int indeks , int nr_strony )
+	{
+		try
+		{
+			odczyt = new FileReader ( plik );
+		} 
+		catch (FileNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		c = new int[ 2 ];
+		b = new int[ 2 ];
+		b[ 0 ] = indeks;
+		b[ 1 ] = nr_strony;
+		odczytywanie = new BufferedReader( odczyt );
+		linie_pliku = new String[lista.size()];
+		tmp3 = konwersja( bufor );
+		
+		for( i = 0 ; i < lista.size() ; i++ )
+		{			
+			try 
+			{
+				linie_pliku [ i ] = odczytywanie.readLine();
+			} 
+			catch (IOException e) 
+			{
+				e.printStackTrace();
+			}
+			c = lista.get(i);
+			if( c[0] == b[0] && c[1] == b[1] )
+			{	
+				linie_pliku [ i ] = tmp3;
+			}
+		}
+		
+		try
+		{
+			zapis = new FileWriter ( plik );
+		} 
+		catch (IOException e1)
+		{
+			e1.printStackTrace();
+		}
+	
+		plik.delete();
+		
+		try
+		{
+			zapis = new FileWriter ( plik , true );
+		} 
+		catch (IOException e1)
+		{
+			e1.printStackTrace();
+		}
+		
+		for( i = 0 ; i < lista.size() ; i++ )
+		{
+			try 
+			{
+				zapis.write( linie_pliku [ i ] + "\r\n" );
+			} 
+			catch (IOException e) 
+			{
+				e.printStackTrace();
+			}
+		} 
+		try {
+			zapis.close();
+			odczyt.close();
+			odczytywanie.close();
+		} 
+		catch (IOException e) 
+		{
 			e.printStackTrace();
 		}
 	}
@@ -188,10 +287,4 @@ public class Plik_wymiany
 			System.out.print(lista.get(i)+" ");
 		}
 	}
-	
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
-
 }
