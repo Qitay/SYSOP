@@ -19,13 +19,16 @@ public class semafory
 		wartosc = w;
 	}
 	
-	public void XP()
+	public void XP(semafory S, int i)
 	{
-		
+		S.wartosc=S.wartosc+i;
 	}
 	
-	public void XV()
+	public void XV(semafory S, int i)
 	{
-		
+		while (S.wartosc>=i)
+		{
+			S.wartosc=S.wartosc-i;
+		}
 	}
 }
