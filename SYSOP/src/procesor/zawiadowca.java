@@ -20,20 +20,10 @@ public class zawiadowca
 	ArrayList<proc> siedem = new ArrayList<proc>(3);
 	ArrayList<proc> osiem = new ArrayList<proc>(3);
 	
+	proc wybrany;
+	
 	zawiadowca()
 	{
-		Boolean whichqs[] = new Boolean[32];
-		
-		ArrayList<ArrayList<proc>> qs = new ArrayList<ArrayList<proc>>(7);
-		ArrayList<proc> jeden = new ArrayList<proc>(3);
-		ArrayList<proc> dwa = new ArrayList<proc>(3);
-		ArrayList<proc> trzy = new ArrayList<proc>(3);
-		ArrayList<proc> cztery = new ArrayList<proc>(3);
-		ArrayList<proc> piec = new ArrayList<proc>(3);
-		ArrayList<proc> szesc = new ArrayList<proc>(3);
-		ArrayList<proc> siedem = new ArrayList<proc>(3);
-		ArrayList<proc> osiem = new ArrayList<proc>(3);
-
 		qs.add(0,jeden);
 		qs.add(1,dwa);
 		qs.add(2,trzy);
@@ -159,25 +149,4 @@ public class zawiadowca
 			}
 		}
 	}
-
-		
-	//Queue<PCB> qs1 = new PriorityQueue<PCB>(3);
-	//PriorityQueue<PriorityQueue<PCB>> qs = new PriorityQueue<PriorityQueue<PCB>>(7);
-	//Comparator<proc> comparator = new proc.priority(23);
-	//PriorityQueue<proc> qs = new PriorityQueue<proc>(31, comparator);
-	
-	
-	public void wpisz_proces()
-	{
-		for(int i=0; i<=31; i++)
-		{
-			if (whitchqs[i] == false)
-			{
-				qs.offer(proces);
-				whitchqs[i] = true;
-				break;
-			}
-		}
-	}
-
 }
