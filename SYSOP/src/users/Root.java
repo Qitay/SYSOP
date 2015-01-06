@@ -29,7 +29,7 @@ public class Root
 		bw.close();
 	}
 	
-	void usermod_group (String name, int gid) throws IOException		//OK zamiana grupy (wyjatki)
+	void usermod_group (String name, int gid) throws IOException		//zamiana grupy (wyjatki)
 	{
 		String[][] arr = readUsers();
 		

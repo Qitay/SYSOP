@@ -1,0 +1,4 @@
+root:abc:0:0
+Cracovia:Krakow:0:1
+Arka:Gdynia:1:1
+Kszo:Ostrowiec:2:1
