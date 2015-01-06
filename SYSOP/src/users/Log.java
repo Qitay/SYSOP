@@ -11,19 +11,42 @@ public class Log
 	// Login bedzie sprawdzal uzytkownika i haslo w pliku tekstowym, a nastepnie
 	// tworzyl obiekt i dawal parametry konstruktorowi User (chyba ze tworzymy Root)
 	
-	boolean verifyLogin (String userName, String passwd) throws IOException
+	boolean verifyLogin (String userName, String passwd) throws IOException		//zwraca bool
 	{
-		String[][] arr = readUsers();
+		String[] arr = userData(userName);
+		boolean b;
 		
-		if (userName == "root")
+	
+		if (arr[0].equals(userName) && arr[1].equals(passwd))
 		{
-			if (arr[0][1] == passwd)
-				
+			b = true;
 		}
 		else
 		{
-			
+			b = false;
 		}
+		
+		return (b);
+	}
+	
+	int giveUid (String userName) throws IOException
+	{
+		int uid;
+		String[] data;
+		
+		data = userData(userName);
+		uid = Integer.parseInt(data[2]);
+		
+		return (uid);
+	}
+	
+	void setRoot () throws IOException
+	{
+		Scanner sc = new Scanner(System.in);
+		System.out.print("Ustaw haslo administratora: ");
+		String p = sc.nextLine();
+		Root admin = new Root();
+		admin.usermod_passwd("root", p);
 	}
 	
 	//-------------------------------INNE FUNKCJE-----------------------------------
@@ -36,7 +59,7 @@ public class Log
 		int n=0;
 		
 		while ((line = br.readLine()) != null)
-		{
+		{ 
 			n++;
 		}
 		

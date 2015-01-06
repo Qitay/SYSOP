@@ -29,7 +29,7 @@ public class Root
 		bw.close();
 	}
 	
-	void usermod_group (String name, int gid) throws IOException		//OK zamiana grupy
+	void usermod_group (String name, int gid) throws IOException		//OK zamiana grupy (wyjatki)
 	{
 		String[][] arr = readUsers();
 		
@@ -61,7 +61,7 @@ public class Root
 	
 	void userdel (String name) throws IOException						//OK usun uzytkownika
 	{
-		if (name != "root")
+		if (name != "root" && checkUser(name)==true)
 		{
 			String[][] arr = readUsers();
 			String[][] outArr = new String [(linesNum("passwd.txt"))-1][4];
@@ -88,6 +88,14 @@ public class Root
 				}
 			}
 			updateUsers(outArr);
+			System.out.println("Usunieto uzytkownika!");
+		}
+		else
+		{
+			if(name == "root")
+				System.out.println("Nie mozna usunac uzytkownika root.");
+			else
+				System.out.println("Uzytkownik nie istenieje.");
 		}
 	}
 	
@@ -105,7 +113,7 @@ public class Root
 		bw.close();
 	}
 	
-	void groupAddUser (String groupName, String userName) throws IOException	//OK dodaj uzytkownika do grupy
+	void groupAddUser (String groupName, String userName) throws IOException	//OK dodaj uzytkownika do grupy (wyjatek: czy istnieje grupa)
 	{
 		String[][] arr = readGroup();
 		
@@ -125,7 +133,7 @@ public class Root
 		updateGroup(arr);
 	}
 	
-	void groupdel(String groupName) throws IOException					//(?) usun grupe
+	void groupdel(String groupName) throws IOException					//(?) usun grupe (wyjatek)
 	{
 		if (groupName != "admin" || groupName != "default" )	//NullPointerException popraw!
 		{
@@ -167,6 +175,19 @@ public class Root
 	}
 	
 	//-------------------------------INNE FUNKCJE-----------------------------------
+	
+	boolean checkUser(String name) throws IOException					//OK sprawdza czy istnieje uzytkownik
+	{
+		String[][] arr = readUsers();
+		
+		for (int i=0 ; i<arr.length ; i++)
+		{
+			if (arr[i][0].contains(name))
+				return (true);
+		}
+		
+		return (false);
+	}
 	
 	int linesNum(String file) throws IOException						//OK liczba linii pliku tekstwego
 	{

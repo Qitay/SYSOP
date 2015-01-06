@@ -12,16 +12,26 @@ public class User
 	int uid;
 	int gid;
 	
-	User (String userName, int uid, int gid)
+	User (int uid) throws IOException									//OK konstruktor
 	{
-		this.userName = userName;
-		this.uid = uid;
-		this.gid = gid;
+		String[][] arr = readUsers();
+		
+		for (int i=0 ; i<arr.length ; i++)
+		{
+			if (arr[i][2].contains(String.valueOf(uid)))
+			{
+				this.userName = arr[i][0];
+				this.gid = Integer.parseInt(arr[i][3]);
+			}
+			
+			this.uid = uid;
+		}
+		
 	}
 	
 	//----------------------------FUNKCJE UZYTWKONIK--------------------------------
 	
-	void usermod_passwd (String passwd) throws IOException	//(?) zmiana hasla -> gotowe do sprawdzenia
+	void usermod_passwd (String passwd) throws IOException				//(?) zmiana hasla -> gotowe do sprawdzenia
 	{
 		String[][] arr = readUsers();
 		
