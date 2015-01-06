@@ -10,6 +10,8 @@ public class proc {
 	stan s;
 	int nice;
 	int cpu;
+	int priorytet;
+	int bajt;
 	int licznikRozkazow; // wskazuje adres następnego rozkazu do wykonania  
 	int addr; //adres w bloku pamięci
 	int ExitStatus; //1 oznacza poprawne zako�czenie procesu

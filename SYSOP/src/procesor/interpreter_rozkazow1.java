@@ -1,6 +1,5 @@
 package procesor;
 import java.io.UnsupportedEncodingException;
-
 import processmanagement.ProcesorManagement;
 import memory.Pamiec;
 

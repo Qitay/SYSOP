@@ -1,32 +1,157 @@
 package processmanagement;
 //package procesor;
 
-import java.util.PriorityQueue;
-import java.util.Queue;
+
+import java.util.ArrayList;
+
+import memory.Pamiec;
+
+
+
 
 public class zawiadowca 
 {
+	ProcesorManagement PrM;
 	
+	Boolean whichqs[] = new Boolean[32];
 	
+	ArrayList<ArrayList<proc>> qs = new ArrayList<ArrayList<proc>>(7);
+	ArrayList<proc> jeden = new ArrayList<proc>(3); //czemu ta lista ma d∏ugoÊç 4? a jak b´dzie wi´cej procesów?
+	ArrayList<proc> dwa = new ArrayList<proc>(3);
+	ArrayList<proc> trzy = new ArrayList<proc>(3);
+	ArrayList<proc> cztery = new ArrayList<proc>(3);
+	ArrayList<proc> piec = new ArrayList<proc>(3);
+	ArrayList<proc> szesc = new ArrayList<proc>(3);
+	ArrayList<proc> siedem = new ArrayList<proc>(3);
+	ArrayList<proc> osiem = new ArrayList<proc>(3);
 	
-	Boolean whitchqs[] = new Boolean[32];
+	proc wybrany;
+	Pamiec pam;
 	
-	Queue<PCB> qs1 = new PriorityQueue<PCB>(31);
-	
-	public void Run()
+	zawiadowca()
 	{
-		
+		qs.add(0,jeden);
+		qs.add(1,dwa);
+		qs.add(2,trzy);
+		qs.add(3,cztery);
+		qs.add(4,piec);
+		qs.add(5,szesc);
+		qs.add(6,siedem);
+		qs.add(7,osiem);
 	}
 	
-	public void szukaj_proces()
+	void wybieranie_procesu()
 	{
-		
+		wybrany = null;
+		int a = qs.indexOf(wybrany);
+		przeliczanie_procesu(wybrany);
+		qs.remove(a);
 	}
 	
-	public void przeliczaj_priorytety()
+	
+	void przeliczanie_procesu(proc proces)
 	{
+		int lr=proces.licznikRozkazow;
 		
+		while(proces.s == stan.AKTYWNY)
+		{
+			procesor.interpreter_rozkazow1.Run(proces.addr, proces.bajt);
+			proces.licznikRozkazow++;
+			proces.cpu++;
+			if (proces.licznikRozkazow-lr<=4)
+			{
+				proces.s = stan.OCZEKUJACY;
+				dodaj_proces(proces);
+			}
+		}
+		for (ArrayList<proc> listy : qs)
+		{
+			for (proc procesy : listy)
+			{
+				procesy.cpu= procesy.cpu/2;
+				qs.remove(procesy);
+				pam.USUN(proces.addr);
+				dodaj_proces(procesy);
+			}
+		}
+		wybieranie_procesu();
 	}
 	
-
+	
+	void dodaj_proces(proc proces)
+	{
+		int a = proces.priorytet/4; 
+		if (a <=4) 
+		{
+			jeden.add(proces);
+			for (int i=0; i<=3; i++)
+			{
+				if (whichqs[a] = false) whichqs[a] = true;
+				else a++;
+			}
+		}
+		else if (proces.priorytet/4 <=8) 
+		{
+			dwa.add(proces);
+			for (int i=4; i<=7; i++)
+			{
+				if (whichqs[a] = false) whichqs[a] = true;
+				else a++;
+			}
+		}
+		else if (proces.priorytet/4 <=12) 
+		{
+			trzy.add(proces);
+			for (int i=8; i<=11; i++)
+			{
+				if (whichqs[a] = false) whichqs[a] = true;
+				else a++;
+			}
+		}
+		else if (proces.priorytet/4 <=16) 
+		{
+			cztery.add(proces);
+			for (int i=12; i<=15; i++)
+			{
+				if (whichqs[a] = false) whichqs[a] = true;
+				else a++;
+			}
+		}
+		else if (proces.priorytet/4 <=20) 
+		{
+			piec.add(proces);
+			for (int i=16; i<=19; i++)
+			{
+				if (whichqs[a] = false) whichqs[a] = true;
+				else a++;
+			}
+		}
+		else if (proces.priorytet/4 <=24) 
+		{
+			szesc.add(proces);
+			for (int i=20; i<=23; i++)
+			{
+				if (whichqs[a] = false) whichqs[a] = true;
+				else a++;
+			}
+		}
+		else if (proces.priorytet/4 <=28) 
+		{
+			siedem.add(proces);
+			for (int i=24; i<=27; i++)
+			{
+				if (whichqs[a] = false) whichqs[a] = true;
+				else a++;
+			}
+		}
+		else if (proces.priorytet/4 <=32) 
+		{
+			osiem.add(proces);
+			for (int i=28; i<=31; i++)
+			{
+				if (whichqs[a] = false) whichqs[a] = true;
+				else a++;
+			}
+		}
+	}
 }
