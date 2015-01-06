@@ -32,8 +32,6 @@ public class zawiadowca
 		qs.add(5,szesc);
 		qs.add(6,siedem);
 		qs.add(7,osiem);
-		
-		proc wybrany;
 	}
 	
 	void wybieranie_procesu()
