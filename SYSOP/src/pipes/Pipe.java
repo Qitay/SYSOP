@@ -12,7 +12,8 @@ public class Pipe {
 	File FileTab[]; 			// odpowiada tablicy plików 
 								// przechowuje informacje czy mo¿na czytaæ, czy pisaæ i odnoœnik do Inode na InodeList
 	
-	int licznik; 				// zmienna pomocnicza iloœæ istniej¹cych pipes
+	int FileTabcount; 			// zmienna pomocnicza iloœæ istniej¹cych deskryptorów	
+	int InodeListcount;			// zmienna pomocnicza iloœæ istniej¹cych pipes
 	
 	public Pipe()
 	{
@@ -22,11 +23,13 @@ public class Pipe {
 		{
 			FileTab[i] = null;
 		}
-		licznik = 0;
+		FileTabcount = 0;
+		InodeListcount = 0;
 	}
 	
-	public int DoPipe(int fd[])
+	public int[] DoPipe()
 	{
+		int fd[]= new int[2];
 		get_pipe_inode();
 		//	przydziel nowy i-wezel z urzadzenia do przechowywania laczy
 		// 	(za pomoca funkcji get_pipe_inode);
@@ -42,10 +45,10 @@ public class Pipe {
 		// 	podstawiajac od razu odpowiednie wartosci w argumencie fd
 		//	(fd[0]= deskryptor do czytania, fd[1]= deskryptor do pisania);
 		
-      	fd[0] = licznik;
-      	fd[1] = licznik + 1;
-		
-		return 0;
+      	fd[0] = FileTabcount;
+      	fd[1] = FileTabcount + 1;
+      	FileTabcount = FileTabcount +2;
+		return fd;
 	};
 	
 	public void get_pipe_inode()
@@ -56,45 +59,54 @@ public class Pipe {
 	public void get_filetable_positions()
 	{
 		File fd0 = new File();
-		fd0.loc = licznik;
+		fd0.loc = InodeListcount;
 		fd0.readwrite = false;
 		File fd1 = new File();
-		fd1.loc = licznik;
+		fd1.loc = InodeListcount;
 		fd1.readwrite = true;
+		InodeListcount++;
 		for (int i=0; i<31; i++)
 		{
-			if (FileTab[i] == null)
+			if (FileTab[i] == null && FileTab[i+1] == null )
 			{
 				FileTab[i] = fd0;
 				FileTab[i+1] = fd1;
 				break;
 			}
 		}
-		licznik = 0;	
 	}
 	
 	public int write(int fd, String input)
 	{
 		if(FileTab[fd].readwrite == true)
 		{
-			int tmp;
-			tmp = FileTab[fd].loc;
 			
-			return 0;
+			Pipe_Inode tmp = InodeList.get(FileTab[fd-1].loc);
+			tmp.buff = input;
+			InodeList.set(FileTab[fd].loc, tmp);
+			
+			return 1;
 		}
 		else
 		{
 			System.out.println("B³¹d zapisu: pole read-only");
-			return 1;
+			return 0;
 		}
 	}
 		
 		
-	public int read(int fd, String output)
+	public String read(int fd)
 	{
-		
-		
-		return 0;
+		if(FileTab[fd].readwrite == false)
+		{
+			String output = InodeList.get(FileTab[fd].loc).buff;
+			return output;	
+		}
+		else
+		{
+			System.out.println("B³¹d odczytu: pole write-only");
+			return null;
+		}
 	}
 	
 	public int close(int fd[])
@@ -110,26 +122,23 @@ public class Pipe {
 	{
 
 		int fd[] = new int [2];
+
 		
 		Pipe pipe = new Pipe();
-		pipe.DoPipe(fd);
-		
+		fd = pipe.DoPipe();
 		//////////////// WRITE ///////////////////////////////////////
 		Scanner reading = new Scanner(System.in);
 		String txt;
 		System.out.println("Funkcja WRITE - Podaj dane do wczytania:");
 		txt = reading.nextLine();
-		pipe.write(fd[0], txt);
+		pipe.write(fd[1], txt);
+		
 		//////////////////////////////////////////////////////////////
 		
 		///////////////// READ ///////////////////////////////////////
-		String output = null;
-		pipe.read(fd[1], output);
-		System.out.println("Funkcja READ - Odczytano dane:" + output);
-		
-		
-		
-
-		
+		String output = "a";
+		output = pipe.read(fd[0]);
+		System.out.println("Funkcja READ - Odczytano dane:"+ output);
+		//////////////////////////////////////////////////////////////
 	}
 }
