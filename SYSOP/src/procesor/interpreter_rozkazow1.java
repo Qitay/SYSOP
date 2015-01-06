@@ -1,6 +1,9 @@
 package procesor;
 import java.io.UnsupportedEncodingException;
 
+import processmanagement.ProcesorManagement;
+import memory.Pamiec;
+
 
 public class interpreter_rozkazow1 
 {
