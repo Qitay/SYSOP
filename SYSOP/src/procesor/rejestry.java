@@ -2,12 +2,12 @@ package procesor;
 
 public class rejestry 
 {
-	public static Object r0 = 0;
-	public static Object r1 = 0;
-	public static Object r2 = 0;
-	public static Object r3 = 0;
-	public static Object r4 = 0;
-	public static Object r5 = 0;
+	public static int r0 = 0;
+	public static int r1 = 0;
+	public static int r2 = 0;
+	public static int r3 = 0;
+	public static int r4 = 0;
+	public static int r5 = 0;
 	public static int lr = 0; // licznik rozkazów
 	public static void wyczysc_rejestry()
 	{

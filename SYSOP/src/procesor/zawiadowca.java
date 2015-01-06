@@ -36,7 +36,7 @@ public class zawiadowca
 	
 	void wybieranie_procesu()
 	{
-		//proc wybrany;
+		wybrany = null;
 		int a = qs.indexOf(wybrany);
 		przeliczanie_procesu(wybrany);
 		qs.remove(a);

@@ -31,4 +31,6 @@ public class semafory
 			S.wartosc=S.wartosc-i;
 		}
 	}
+	
+	bla = 10;
 }

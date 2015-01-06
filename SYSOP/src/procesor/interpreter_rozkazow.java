@@ -16,6 +16,7 @@ public class interpreter_rozkazow
 	
 	public static void Run() 
 	{
+		
 		if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)rozkaz.MOV.ordinal())
 		{
 			rejestry.lr++;
@@ -23,18 +24,147 @@ public class interpreter_rozkazow
 			if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.R0.ordinal())
 			{
 				rejestry.lr++;
+				if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.WAR.ordinal())
+				{
+					rejestry.lr++;
+					int temp = Pamiec.pamiec_op[(int)rejestry.lr];
+					rejestry.lr++;
+					rejestry.r0 = temp;
+				}
 				
+				else if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.R1.ordinal())
+				{
+					rejestry.lr++;
+					rejestry.r0 = rejestry.r1;
+				}
+				
+				else if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.R2.ordinal())
+				{
+					rejestry.lr++;
+					rejestry.r0 = rejestry.r2;
+				}
+				
+				else if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.R3.ordinal())
+				{
+					rejestry.lr++;
+					rejestry.r0 = rejestry.r3;
+				}
+				
+				else if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.R4.ordinal())
+				{
+					rejestry.lr++;
+					rejestry.r0 = rejestry.r4;
+				}
+				
+				else if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.R5.ordinal())
+				{
+					rejestry.lr++;
+					rejestry.r0 = rejestry.r5;
+				}
+				
+				else if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.LR.ordinal())
+				{
+					rejestry.lr++;
+					rejestry.r0 = rejestry.lr;
+				}
 			}
 			
 			else if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.R1.ordinal())
 			{
 				rejestry.lr++;
 				
+				if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.WAR.ordinal())
+				{
+					rejestry.lr++;
+					int temp = Pamiec.pamiec_op[(int)rejestry.lr];
+					rejestry.lr++;
+					rejestry.r1 = temp;
+				}
+				
+				else if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.R0.ordinal())
+				{
+					rejestry.lr++;
+					rejestry.r1 = rejestry.r0;
+				}
+				
+				else if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.R2.ordinal())
+				{
+					rejestry.lr++;
+					rejestry.r1 = rejestry.r2;
+				}
+				
+				else if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.R3.ordinal())
+				{
+					rejestry.lr++;
+					rejestry.r1 = rejestry.r3;
+				}
+				
+				else if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.R4.ordinal())
+				{
+					rejestry.lr++;
+					rejestry.r1 = rejestry.r4;
+				}
+				
+				else if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.R5.ordinal())
+				{
+					rejestry.lr++;
+					rejestry.r1 = rejestry.r5;
+				}
+				
+				else if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.LR.ordinal())
+				{
+					rejestry.lr++;
+					rejestry.r1 = rejestry.lr;
+				}		
 			}
 			
 			else if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.R2.ordinal())
 			{
 				rejestry.lr++;
+				
+				if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.WAR.ordinal())
+				{
+					rejestry.lr++;
+					int temp = Pamiec.pamiec_op[(int)rejestry.lr];
+					rejestry.lr++;
+					rejestry.r2 = temp;
+				}
+				
+				else if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.R0.ordinal())
+				{
+					rejestry.lr++;
+					rejestry.r2 = rejestry.r0;
+				}
+				
+				else if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.R1.ordinal())
+				{
+					rejestry.lr++;
+					rejestry.r2 = rejestry.r1;
+				}
+				
+				else if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.R3.ordinal())
+				{
+					rejestry.lr++;
+					rejestry.r2 = rejestry.r3;
+				}
+				
+				else if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.R4.ordinal())
+				{
+					rejestry.lr++;
+					rejestry.r2 = rejestry.r4;
+				}
+				
+				else if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.R5.ordinal())
+				{
+					rejestry.lr++;
+					rejestry.r2 = rejestry.r5;
+				}
+				
+				else if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.LR.ordinal())
+				{
+					rejestry.lr++;
+					rejestry.r2 = rejestry.lr;
+				}
 				
 			}
 			
@@ -42,11 +172,99 @@ public class interpreter_rozkazow
 			{
 				rejestry.lr++;
 				
+				if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.WAR.ordinal())
+				{
+					rejestry.lr++;
+					int temp = Pamiec.pamiec_op[(int)rejestry.lr];
+					rejestry.lr++;
+					rejestry.r3 = temp;
+				}
+				
+				else if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.R0.ordinal())
+				{
+					rejestry.lr++;
+					rejestry.r3 = rejestry.r0;
+				}
+				
+				else if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.R1.ordinal())
+				{
+					rejestry.lr++;
+					rejestry.r3 = rejestry.r1;
+				}
+				
+				else if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.R2.ordinal())
+				{
+					rejestry.lr++;
+					rejestry.r3 = rejestry.r2;
+				}
+				
+				else if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.R4.ordinal())
+				{
+					rejestry.lr++;
+					rejestry.r3 = rejestry.r4;
+				}
+				
+				else if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.R5.ordinal())
+				{
+					rejestry.lr++;
+					rejestry.r3 = rejestry.r5;
+				}
+				
+				else if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.LR.ordinal())
+				{
+					rejestry.lr++;
+					rejestry.r3 = rejestry.lr;
+				}
+				
 			}
 			
 			else if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.R4.ordinal())
 			{
 				rejestry.lr++;
+				
+				if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.WAR.ordinal())
+				{
+					rejestry.lr++;
+					int temp = Pamiec.pamiec_op[(int)rejestry.lr];
+					rejestry.lr++;
+					rejestry.r4 = temp;
+				}
+				
+				else if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.R0.ordinal())
+				{
+					rejestry.lr++;
+					rejestry.r4 = rejestry.r0;
+				}
+				
+				else if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.R1.ordinal())
+				{
+					rejestry.lr++;
+					rejestry.r4 = rejestry.r1;
+				}
+				
+				else if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.R2.ordinal())
+				{
+					rejestry.lr++;
+					rejestry.r4 = rejestry.r2;
+				}
+				
+				else if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.R3.ordinal())
+				{
+					rejestry.lr++;
+					rejestry.r4 = rejestry.r3;
+				}
+				
+				else if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.R5.ordinal())
+				{
+					rejestry.lr++;
+					rejestry.r4 = rejestry.r5;
+				}
+				
+				else if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.LR.ordinal())
+				{
+					rejestry.lr++;
+					rejestry.r4 = rejestry.lr;
+				}
 				
 			}
 			
@@ -54,11 +272,99 @@ public class interpreter_rozkazow
 			{
 				rejestry.lr++;
 				
+				if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.WAR.ordinal())
+				{
+					rejestry.lr++;
+					int temp = Pamiec.pamiec_op[(int)rejestry.lr];
+					rejestry.lr++;
+					rejestry.r5 = temp;
+				}
+				
+				else if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.R0.ordinal())
+				{
+					rejestry.lr++;
+					rejestry.r5 = rejestry.r0;
+				}
+				
+				else if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.R1.ordinal())
+				{
+					rejestry.lr++;
+					rejestry.r5 = rejestry.r1;
+				}
+				
+				else if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.R2.ordinal())
+				{
+					rejestry.lr++;
+					rejestry.r5 = rejestry.r2;
+				}
+				
+				else if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.R3.ordinal())
+				{
+					rejestry.lr++;
+					rejestry.r5 = rejestry.r3;
+				}
+				
+				else if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.R4.ordinal())
+				{
+					rejestry.lr++;
+					rejestry.r5 = rejestry.r4;
+				}
+				
+				else if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.LR.ordinal())
+				{
+					rejestry.lr++;
+					rejestry.r5 = rejestry.lr;
+				}
+				
 			}
 			
 			else if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.LR.ordinal())
 			{
 				rejestry.lr++;
+				
+				if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.WAR.ordinal())
+				{
+					rejestry.lr++;
+					int temp = Pamiec.pamiec_op[(int)rejestry.lr];
+					rejestry.lr++;
+					rejestry.lr = temp;
+				}
+				
+				else if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.R0.ordinal())
+				{
+					rejestry.lr++;
+					rejestry.lr = (int)rejestry.r0;
+				}
+				
+				else if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.R1.ordinal())
+				{
+					rejestry.lr++;
+					rejestry.lr = (int)rejestry.r1;
+				}
+				
+				else if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.R2.ordinal())
+				{
+					rejestry.lr++;
+					rejestry.lr = (int)rejestry.r2;
+				}
+				
+				else if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.R3.ordinal())
+				{
+					rejestry.lr++;
+					rejestry.lr = (int)rejestry.r3;
+				}
+				
+				else if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.R4.ordinal())
+				{
+					rejestry.lr++;
+					rejestry.lr = (int)rejestry.r4;
+				}
+				
+				else if (Pamiec.pamiec_op[(int)rejestry.lr] == (byte)wartosc.R5.ordinal())
+				{
+					rejestry.lr++;
+					rejestry.lr = (int)rejestry.r5;
+				}
 				
 			}
 		}
@@ -537,5 +843,4 @@ public class interpreter_rozkazow
 			}
 		}
 	}
-
 }
