@@ -4,12 +4,12 @@ package processmanagement;
 
 public class ProcesorManagement {
 	
-	interpreter_rozkazow  i_r;
+	procesor.interpreter_rozkazow1  i_r;
 	ProcessMaganement PsM;
 	MemoryManagement MM;
 	
 	ProcesorManagement(){
-		i_r = new interpreter_rozkazow();
+		i_r = new procesor.interpreter_rozkazow1();
 
 		i_r.PrM=this;
 		
