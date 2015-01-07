@@ -11,6 +11,7 @@ public class proc {
 	int nice;
 	int cpu;
 	int priorytet;
+	int miejsce_whichqs;
 	int bajt;
 	int licznikRozkazow; // wskazuje adres następnego rozkazu do wykonania  
 	int addr; //adres w bloku pamięci
