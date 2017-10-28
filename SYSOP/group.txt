@@ -1,0 +1,2 @@
+admin:0:root
+default:1:aksdhjka,A,qw,p,m,b
